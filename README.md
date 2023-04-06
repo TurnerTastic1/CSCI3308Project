@@ -10,3 +10,6 @@ The TurboTransit team:
 TurboTransit is a quick, easy way to find and compare the fastest, cheapest ways from A to B between various modes of tranportation, especially public transit and rideshare services like Uber. In a time-pressed world, we don't always have the time to compare all of our options in so many different places! With TurboTransit, riders are empowered to make more informed decisions on their transit choices, making tradeoffs on price, duration, and the route itself.
 
 Why travel alone? Once you find your route, plan a trip and invite your friends to come along!
+
+Vision Statement
+To provide inexpensive, rapid and convenient travel for users across Denver and its surrounds areas.  
