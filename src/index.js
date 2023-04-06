@@ -57,19 +57,8 @@ app.use(
   })
 );
 
-// // Authentication Middleware.
-// const auth = (req, res, next) => {
-//     console.log(req.session.user);
-//     if (!req.session.user) {
-//       // Default to login page.
-//       //return console.log("No session access!");
-//       return res.redirect('/discover');
-//     }
-//     next();
-//   };
-  
-// // Authentication Required
-// app.use(auth);
+// Importing the post routes
+import authRoutes from "./js/auth.routes";
 
 // *****************************************************
 // <!-- Section 4 : API Routes -->
@@ -96,26 +85,7 @@ app.get('/logout', (req, res) => {
     });
 });
 
-app.post('/register', async (req, res) => {
-    if (!req.body.username || !req.body.password) {
-      console.log("Error - Missing username or password");
-      return res.render('pages/register', {
-        message: "Missing username or password!"
-      });
-    }
-
-    const hash = await bcrypt.hash(req.body.password, 10);
-    const query = `INSERT INTO users (username, password) VALUES ($1, $2) returning *;`;
-
-    try {
-      await db.one(query, [req.body.username, hash]);
-      return res.redirect('/login');
-    } catch (error) {
-      return res.render('pages/register', {
-        message: "Internal server error or username already exists."
-      });
-    }
-});
+app.use('/', authRoutes);
 
 app.post('/login', async (req, res) => {
 
