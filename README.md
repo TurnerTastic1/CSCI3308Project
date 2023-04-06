@@ -11,5 +11,5 @@ TurboTransit is a quick, easy way to find and compare the fastest, cheapest ways
 
 Why travel alone? Once you find your route, plan a trip and invite your friends to come along!
 
-Vision Statement
+Vision Statement:
 To provide inexpensive, rapid and convenient travel for users across Denver and its surrounds areas.  
