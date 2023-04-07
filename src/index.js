@@ -65,44 +65,6 @@ app.get('/logout', (req, res) => {
 // For example, localhost:3000/auth/register will route to the register page
 app.use('/auth', authRoutes);
 
-app.post('/login', async (req, res) => {
-
-    const query = `SELECT * FROM users WHERE username=$1 ;`;
-    var user = '';
-
-    try {
-      const data = await db.one(query, [req.body.username]);
-      
-      if (data != undefined) {
-        user = data;
-      } else {
-        return console.log("DB did not find user!");
-      }
-    } catch (error) {
-      console.log("Database error - " + error);
-      return res.render('pages/register', {
-        message: "Incorrect username or password. Please register an account."
-      });
-    }
-    
-    try {
-        // check if password from request matches with password in DB
-        const match = await bcrypt.compare(req.body.password, user.password);
-        if (match) {
-            //save user details in session like in lab 8
-            req.session.user = user;
-            req.session.save();
-
-            return res.redirect('/home');
-        }
-    } catch (error) {
-        console.log("Login error: " + error);
-        return res.render('pages/register', {
-          message: "Incorrect username or password. Please register an account."
-        });
-    }
-});
-
 /**
  * This is the route to the discover page
  * It will make a call to the TicketMaster API
