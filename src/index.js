@@ -38,7 +38,7 @@ const authRoutes = require("./js/auth.routes");
 // <!-- Section 4 : API Routes -->
 // *****************************************************
 
-//! Page rendering routes
+// * Page rendering routes * //
 
 app.get('/', (req, res) => {
     res.redirect('/login')
@@ -59,11 +59,12 @@ app.get('/logout', (req, res) => {
     });
 });
 
-//! API routes
+// * API routes * //
 
 //? Route for all authroutes is localhost:3000/auth + the route located on auth.routes.js
 // For example, localhost:3000/auth/register will route to the register page
 app.use('/auth', authRoutes);
+
 
 /**
  * This is the route to the discover page
@@ -79,7 +80,7 @@ app.get('/home', (req, res) => {
         });
     }
     res.render('pages/home'); 
-})
+});
 
 // *****************************************************
 // <!-- Section 5 : Start Server-->
