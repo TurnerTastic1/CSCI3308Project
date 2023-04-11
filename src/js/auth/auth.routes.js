@@ -88,4 +88,17 @@ app.post('/login', async (req, res) => {
     }
 });
 
+app.get('/logout', (req, res) => {
+  if (!req.session.user) {
+    return res.render('pages/login', {
+      message: "Can't logout if you arent logged in :)"
+    });
+  }
+  
+  req.session.destroy();
+  res.render('pages/login', {
+      message: "Logged out Successfully"
+  });
+});
+
 module.exports = app;
