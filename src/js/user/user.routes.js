@@ -14,7 +14,7 @@ const db = require('./userQueries');
 // *****************************************************
 
 // ! This is testing the DB connection ! //
-app.get('/home', async (req, res) => {
+app.get('/profile', async (req, res) => {
     // This checks if the user is logged in
     if (!req.session.user) {
         console.log("Not logged in!");
@@ -31,12 +31,12 @@ app.get('/home', async (req, res) => {
     const dbResponse = await db.userInfo(data);
     // Check if user exists and assign user if no error
     if (dbResponse == undefined) {
-        return res.render('pages/home', {
+        return res.render('pages/profile', {
             user: "No user found!"
         });
     }
 
-    res.render('pages/home', {
+    res.render('pages/profile', {
         user: dbResponse.user
     }); 
 });

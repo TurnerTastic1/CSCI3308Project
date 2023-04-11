@@ -78,7 +78,7 @@ app.post('/login', async (req, res) => {
             req.session.user = user;
             req.session.save();
 
-            return res.redirect('/user/home');
+            return res.redirect('/user/profile');
         }
     } catch (error) {
         console.log("Login error: " + error);
@@ -94,7 +94,7 @@ app.get('/logout', (req, res) => {
       message: "Can't logout if you arent logged in :)"
     });
   }
-  
+
   req.session.destroy();
   res.render('pages/login', {
       message: "Logged out Successfully"
