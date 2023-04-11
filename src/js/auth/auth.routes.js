@@ -1,10 +1,15 @@
+// ********************************************************
+// * This file contains the routes for the auth endpoints *
+// * For example, login, register, etc. *
+// ********************************************************
+
 const express = require('express'); // To build an application server or API
 const app = express.Router();
 const session = require('express-session'); // To set the session object. To store or access session data, use the `req.session`, which is (generally) serialized as JSON by the store.
 const bcrypt = require('bcrypt'); //  To hash passwords
 
 // db import
-const db = require('./queries');
+const db = require('./authQueries');
 
 
 app.post('/register', async (req, res) => {
@@ -73,7 +78,7 @@ app.post('/login', async (req, res) => {
             req.session.user = user;
             req.session.save();
 
-            return res.redirect('/home');
+            return res.redirect('/user/profile');
         }
     } catch (error) {
         console.log("Login error: " + error);
@@ -81,6 +86,19 @@ app.post('/login', async (req, res) => {
           message: "Incorrect username or password. Please register an account."
         });
     }
+});
+
+app.get('/logout', (req, res) => {
+  if (!req.session.user) {
+    return res.render('pages/login', {
+      message: "Can't logout if you arent logged in :)"
+    });
+  }
+
+  req.session.destroy();
+  res.render('pages/login', {
+      message: "Logged out Successfully"
+  });
 });
 
 module.exports = app;
