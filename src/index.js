@@ -29,13 +29,7 @@ app.use(
   })
 );
 
-// Importing the post routes
-const authRoutes = require("./js/auth.routes");
-
 // *****************************************************
-// <!-- Section 4 : API Routes -->
-// *****************************************************
-
 // * Page rendering routes * //
 
 app.get('/', (req, res) => {
@@ -57,28 +51,21 @@ app.get('/logout', (req, res) => {
     });
 });
 
+// *****************************************************
 // * API routes * //
+// * Importing the post routes * //
+const authRoutes = require("./js/auth/auth.routes");
+const userRoutes = require("./js/user/user.routes");
+const apiRoutes = require("./js/services/api.service");
 
 //? Route for all authroutes is localhost:3000/auth + the route located on auth.routes.js
-// For example, localhost:3000/auth/register will route to the register page
+//? For example, localhost:3000/auth/register will route to the register page
 app.use('/auth', authRoutes);
 
+app.use('/user', userRoutes);
 
-/**
- * This is the route to the discover page
- * It will make a call to the TicketMaster API
- * and display the results on the page
- */
-app.get('/home', (req, res) => {
-    // This checks if the user is logged in
-    if (!req.session.user) {
-        console.log("Not logged in!");
-        return res.render('pages/login', {
-          message: "Log in to view!"
-        });
-    }
-    res.render('pages/home'); 
-});
+// app.use('/api', apiRoutes);
+
 
 // *****************************************************
 // <!-- Section 5 : Start Server-->
