@@ -5,10 +5,16 @@
 
 const express = require('express'); // To build an application server or API
 const app = express.Router();
-const session = require('express-session'); // To set the session object. To store or access session data, use the `req.session`, which is (generally) serialized as JSON by the store.
-const bcrypt = require('bcrypt'); //  To hash passwords
 
-app.get('/home', (req, res) => {
+// db import
+const db = require('./userQueries');
+
+// *****************************************************
+// * Page rendering routes * //
+// *****************************************************
+
+// ! This is testing the DB connection ! //
+app.get('/home', async (req, res) => {
     // This checks if the user is logged in
     if (!req.session.user) {
         console.log("Not logged in!");
@@ -16,9 +22,22 @@ app.get('/home', (req, res) => {
           message: "Log in to view!"
         });
     }
+    
+    // Prepping data for DB
+    const data = {
+        username: req.session.user.username
+    };
+    // Querying DB
+    const dbResponse = await db.userInfo(data);
+    // Check if user exists and assign user if no error
+    if (dbResponse == undefined) {
+        return res.render('pages/home', {
+            user: "No user found!"
+        });
+    }
 
     res.render('pages/home', {
-        user: req.session.user
+        user: dbResponse.user
     }); 
 });
 

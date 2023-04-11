@@ -9,7 +9,7 @@ const session = require('express-session'); // To set the session object. To sto
 const bcrypt = require('bcrypt'); //  To hash passwords
 
 // db import
-const db = require('../queries');
+const db = require('./authQueries');
 
 
 app.post('/register', async (req, res) => {
