@@ -4,6 +4,8 @@ const db = require('../dbConnection');
 // * DB queries and logic * //
 
 // ? testing database connection from multiple db controllers
+// Unused in this project but useful for testing
+// Parameters: data = {username: "username"}
 const userInfo = async (data) => {
     const query = `SELECT * FROM users WHERE username=$1 ;`;
     var user = '';

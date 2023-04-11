@@ -22,22 +22,9 @@ app.get('/profile', async (req, res) => {
           message: "Log in to view!"
         });
     }
-    
-    // Prepping data for DB
-    const data = {
-        username: req.session.user.username
-    };
-    // Querying DB
-    const dbResponse = await db.userInfo(data);
-    // Check if user exists and assign user if no error
-    if (dbResponse == undefined) {
-        return res.render('pages/profile', {
-            user: "No user found!"
-        });
-    }
 
     res.render('pages/profile', {
-        user: dbResponse.user
+        user: req.session.user
     }); 
 });
 
