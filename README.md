@@ -3,7 +3,7 @@
 The TurboTransit team:
  - [Jusung Kim](juki6356@colorado.edu) - [GitHub]()
  - [Turner Naef](tuna2323@colorado.edu) - [GitHub]()
- - [Jack Paulman](jack.paulman@colorado.edu) - [GitHub]()
+ - [Jack Paulman](japa9577@colorado.edu) - [GitHub]()
  - [Tavin Turner](tatu1686@colorado.edu) - [GitHub]()
  - [Mia Waddington](miwa4100@colorado.edu) - [GitHub]()
  
