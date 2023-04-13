@@ -25,6 +25,10 @@ app.use(
 
 // *****************************************************
 // * Page rendering routes * //
+app.get('/welcome', (req, res) => {
+  res.status(200).json({status: "success", message: "Welcome!"});
+});
+
 app.get('/', (req, res) => {
     res.redirect('/login')
 });
@@ -56,7 +60,7 @@ app.use('/user', userRoutes);
 // *****************************************************
 // * starting the server and keeping the connection open to listen for more requests * //
 try {
-  app.listen(3000);
+  module.exports = app.listen(3000);
   console.log('Server is listening on port 3000');
 } catch (error) {
   console.log('Server failed to start: ' + error);
