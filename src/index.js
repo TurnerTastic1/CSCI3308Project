@@ -41,6 +41,10 @@ app.get('/home', (req, res) => {
   res.render('pages/home');
 });
 
+// * Static resource routes * //
+app.use('/images', express.static('resources/img'));
+app.use('/styles', express.static('resources/css'));
+
 // *****************************************************
 // * API routes * //
 // * Importing the post routes * //
