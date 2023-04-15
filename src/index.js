@@ -37,6 +37,10 @@ app.get('/register', (req, res) => {
     res.render('pages/register');
 });
 
+app.get('/home', (req, res) => {
+  res.render('pages/home');
+});
+
 // *****************************************************
 // * API routes * //
 // * Importing the post routes * //
@@ -51,7 +55,6 @@ app.use('/auth', authRoutes);
 app.use('/user', userRoutes);
 
 // app.use('/api', apiRoutes);
-
 
 // *****************************************************
 // * starting the server and keeping the connection open to listen for more requests * //
