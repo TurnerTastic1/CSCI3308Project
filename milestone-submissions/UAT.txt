@@ -1,0 +1,42 @@
+User Acceptance Testing: 
+1) Login
+    Description: When the login page loads it should present the user wth two input fields where they can input their username and password. 
+        It should also provide a "login" button which the user can select after filling in the required fields. After selecting this button, 
+        the user should be redirected to the home page, given that they have already registered and their details are saved in the database. 
+        If they enter a vaild username but an incorrect password an error should be thrown informing the user their password is incorrect. 
+        If they enter an invalid username they should be redirected to the register page.  
+    Input Data: 
+        Username: string
+        Password: string
+    User Activity: Input username and password into correct input fields and slect "login" button. 
+    Test Env: Development
+    Expected Results: 
+        Status: 200
+        Redirect to profile page. 
+    Acceptace Testers: Other members in the project group. 
+
+2) Gathering estimated data from Uber API
+    Description: When the user inputs their destination and current location and presses the "search" button, a call will be made to the Uber API. 
+        They user should then be presented with all the options Uber returns including the estimated time and cost of the journey.
+        If the API call fails the user should be presented with an error message stating that Uber data is currently unavailable. 
+    Input Data: 
+        Destination: string
+        Current Location: string
+    User Activity: Enters current location and desired destination in input fields and presses search button. 
+    Test Env: Development
+    Expected Results: 
+        Status: 200
+        List of Uber routes
+    Acceptace Testers: Other members in the project group. 
+
+3) Successful Logout
+    Description: The user mmust be able to click a logout button and end their session. They must then me redirected to the login page with a 
+        message indicating that they successfully logged out. 
+    Input Data: 
+        N/A
+    User Activity: Click the logout button.
+    Test Env: Development
+    Expected Results: 
+        Status: 200
+        Redrected to login page. 
+    Acceptace Testers: Other members in the project group. 

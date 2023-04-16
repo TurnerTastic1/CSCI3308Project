@@ -9,20 +9,72 @@ chai.should();
 chai.use(chaiHttp);
 const {assert, expect} = chai;
 
-describe('Server!', () => {
-  // Sample test case given to test / endpoint.
-  it('Returns the default welcome message', done => {
+// describe('Server!', () => {
+//   // Sample test case given to test / endpoint.
+//   it('Returns the default welcome message', done => {
+//     chai
+//       .request(server)
+//       .get('/welcome')
+//       .end((err, res) => {
+//         expect(res).to.have.status(200);
+//         expect(res.body.status).to.equals('success');
+//         assert.strictEqual(res.body.message, 'Welcome!');
+//         done();
+//       });
+//   });
+
+//   // ===========================================================================
+//   // TO-DO: Part A Login unit test case
+// });
+
+describe('Register!', () => {
+
+  it('Postive - user creation', done => {
     chai
       .request(server)
-      .get('/welcome')
+      .post('/auth/register')
+      .send({username: 'TestAccount1', password: 'Password123'})
       .end((err, res) => {
         expect(res).to.have.status(200);
-        expect(res.body.status).to.equals('success');
-        assert.strictEqual(res.body.message, 'Welcome!');
         done();
       });
   });
 
-  // ===========================================================================
-  // TO-DO: Part A Login unit test case
+  it('Negative - Missing username or password', done => {
+    chai
+      .request(server)
+      .post('/auth/register')
+      .send({username: 'TestAccount1', password: ''})
+      .end((err, res) => {
+        expect(res).to.have.status(400);
+        done();
+      });
+  });
+
+});
+
+describe('Login!', () => {
+
+  it('Positive - user login', done => {
+    chai
+      .request(server)
+      .post('/auth/login')
+      .send({username: 'TestAccount1', password: 'Password123'})
+      .end((err, res) => {
+        expect(res).to.have.status(200);
+        done();
+      });
+  });
+
+  it('Negative - Missing username or password', done => {
+    chai
+      .request(server)
+      .post('/auth/login')
+      .send({username: 'TestAccount1', password: ''})
+      .end((err, res) => {
+        expect(res).to.have.status(400);
+        done();
+      });
+  });
+
 });
