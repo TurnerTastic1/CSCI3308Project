@@ -15,8 +15,8 @@ const db = require('./authQueries');
 app.post('/register', async (req, res) => {
     // * Input validation section * Logic is handled in this file
     if (!req.body.username || !req.body.password) {
-      console.log("Error - Missing username or password");
-      return res.render('pages/register', {
+      // console.log("Error - Missing username or password");
+      return res.status(400).render('pages/register', {
         message: "Missing username or password!"
       });
     }
@@ -33,10 +33,10 @@ app.post('/register', async (req, res) => {
 
     // * Response section * Logic is handled in this file
     if (dbResponse.status == "success") 
-        return res.redirect('/login');
+        return res.status(200).redirect('/login');
     else {
         console.log("Error - " + dbResponse.error);
-        return res.render('pages/register', {
+        return res.status(400).render('pages/register', {
             message: dbResponse.message
         });
     }
@@ -45,8 +45,8 @@ app.post('/register', async (req, res) => {
 app.post('/login', async (req, res) => {
     // * Input validation section * Logic is handled in this file
     if (!req.body.username || !req.body.password) {
-        console.log("Error - Missing username or password");
-        return res.render('pages/login', {
+        // console.log("Error - Missing username or password");
+        return res.status(400).render('pages/login', {
           message: "Missing username or password!"
         });
       }
@@ -61,7 +61,7 @@ app.post('/login', async (req, res) => {
     const dbResponse = await db.login(data);
     // Check if user exists and assign user if no error
     if (dbResponse.status == "error") {
-        return res.render('pages/register', {
+        return res.status(400).render('pages/register', {
           message: dbResponse.message
         });
     }
@@ -78,11 +78,11 @@ app.post('/login', async (req, res) => {
             req.session.user = user;
             req.session.save();
 
-            return res.redirect('/user/profile');
+            return res.status(200).redirect('/user/profile');
         }
     } catch (error) {
         console.log("Login error: " + error);
-        return res.render('pages/register', {
+        return res.status(400).render('pages/register', {
           message: "Incorrect username or password. Please register an account."
         });
     }
