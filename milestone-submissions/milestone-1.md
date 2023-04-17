@@ -1,0 +1,19 @@
+# Milestone 1
+ - [README](https://github.com/TurnerTastic1/TurboTransit#readme)
+    - Team Number
+    - Team Name
+    - Team Members
+    - Application Name
+    - Application Description
+    - Vision Statement
+ - [Version Control](https://github.com/TurnerTastic1/TurboTransit)
+ - Development methodology
+    - We are following an agile strategy with weekly standups, self-assignment and free collaboration on a progess track agreed on by the team.
+    - [Project board](https://github.com/users/TurnerTastic1/projects/3)
+ - Communication plan
+    - Team communication system established
+    - Team meetings every Tuesday at 5:00 PM in CSEL
+ - Meeting plan
+    - Meetings with TA on Mondays at 12:15 PM via Google Meets
+ - [Use Case Diagram](https://github.com/TurnerTastic1/TurboTransit/blob/main/milestone-submissions/Use%20case%20diagram.png)
+ - [Wireframes](https://github.com/TurnerTastic1/TurboTransit/tree/main/wireframes)

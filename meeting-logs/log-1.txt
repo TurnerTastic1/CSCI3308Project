@@ -1,0 +1,25 @@
+Started the meeting talking about what has been done with the database -5 mins
+Went into how meetings will go from now on -5 mins
+Went through the lab 10 write up and talked about project boards -5 mins
+
+Started talking about data bases and what needs to be included into it. -20 mins
+Adding username password table
+Adding trip details 
+Where you’ve been and where you go
+How much
+How long it takes
+Adding routes and bus data and where to get it from
+Possibly adding buff bus later on
+Restricting bus to RTD information
+Issues on fair going to assume they have a pass
+GTFS to gain data 
+Not storing any of this in database as of now
+
+Talking about components of the website -5 mins
+Two components for front end input and output
+Back end components are uber and transit
+
+Next plan and improvement -5 mins
+Changing the front end to give the map and routes showing
+
+Adding in to story board what each person is doing -5 mins
