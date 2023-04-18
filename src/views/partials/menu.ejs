@@ -1,5 +1,8 @@
-<header>
+<header style="background-color: #3f5067;">
     <nav class="navbar navbar-expand-sm border-bottom">
+      <button onclick="location.href='/home'" class="btn ">
+        <img src="images/logo_cropped.jpg" alt="TurboTransitLogo" width="75px"/>
+      </button>
       <div class="container">
         <button
           class="navbar-toggler ms-auto"
@@ -15,12 +18,15 @@
           <ul class="navbar-nav me-auto">
             <li class="nav-item">
               <!-- TO-DO: For Discover, add a <a> tag with an attribute href to call the '/discover' API -->
-                <a class="nav-link" href="/user/profile">Profile</a>
+                <a class="nav-link" href="/user/profile">
+                  <p class="display-6" style="color: white; font-size:x-large; margin-top: 10px;">Profile</p></a>
             </li>
           </ul>
           <div class="nav-item me-1">
             <!-- TO-DO: For Logout, add a <a> tag with an attribute href to call the '/logout API -->
-            <a class="nav-link" href="/auth/logout">Logout</a>
+            <a class="nav-link" href="/auth/logout">
+              <p class="display-6" style="color: white; font-size:x-large; margin-top: 10px;">Logout</p>
+            </a>
           </div>
         </div>
       </div>
