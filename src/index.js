@@ -30,7 +30,11 @@ app.get('/welcome', (req, res) => {
 });
 
 app.get('/', (req, res) => {
-    res.redirect('/login')
+    res.redirect('/login');
+});
+
+app.get('/transit', (req, res) => {
+  res.render('pages/transit');
 });
 
 app.get('/login', (req, res) => {
