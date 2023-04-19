@@ -1,0 +1,33 @@
+<%- include ('../partials/head') %>
+<%- include ('../partials/menu') %>
+<div class="col"><%- include ('../partials/message') %></div>
+    <main style="background-color: #3f5067; min-height: 100vh;" >
+    <div class="container">
+        <!-- THE REST OF YOUR HTML CODE GOES HERE -->
+        <div class="row">
+            <div class="col-md-4">
+                <div>
+                    <img src="images/logo_cropped.jpg" alt="TurboTransitLogo" class="center"/>
+                </div>
+                <div>
+                    <img src="images/logo_text.jpg" alt="TurboTransitLogo" class="center"/>
+                </div>
+            </div>
+            <div class="col-md-8" style="text-align: center; margin-top: 10%;"> 
+                <h6 class="display-6" style="color: white;">Our Vision</h6>
+                <p class="font-weight-light" style="color: white; padding-left: 100px; padding-right: 8%;" > Our vision at TurboTransit is to revolutionize the way people travel in and around Denver by providing an all-in-one platform that offers affordable, efficient, and convenient transportation. 
+                     With TurboTransit, we want to empower our users to make informed decisions about their transportation choices, by combining public transit and rideshare services like Uber under one seamless roof.
+                    Our ultimate goal is to make travel a hassle-free and enjoyable experience, one ride at a time. 
+                </p>
+                <div class="mb-3 form-check">
+                    <button onclick="location.href='/register'" class="btn btn-secondary btn-lg">Get Started ></button>
+                    <p style="color: grey;">Already have an account?
+                        <a href="/login">Login</a> 
+                    </p>
+                </div>
+            </div>
+          </div>
+    </div>
+    </main>
+
+<%- include ('../partials/footer') %>
