@@ -1,7 +1,7 @@
 <%- include ('../partials/head') %>
   <%- include ('../partials/menu') %>
     <div class="col"><%- include ('../partials/message') %></div>
-    <main>
+    <main style="padding: 30px; padding-top: 20px;">
       <form>
         <div class="form-group">
           <label for="textInput">To Your Destination</label>
@@ -11,7 +11,9 @@
           <label for="disabledSelect">From My Location</label>
           <input type="text" id="disabledTextInput" class="form-control" placeholder="Type Your Location">
         </div>
-        <button type="submit" class="btn btn-primary">Search</button>
+        <div style="padding-top: 10px;">
+          <button type="submit" class="btn btn-primary">Search</button>
+        </div>
         </fieldset>
       </form>
 
