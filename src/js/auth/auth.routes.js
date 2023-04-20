@@ -79,6 +79,10 @@ app.post('/login', async (req, res) => {
             req.session.save();
 
             return res.status(200).redirect('/user/profile');
+        } else {
+            return res.status(400).render('pages/login', {
+                message: "Incorrect username or password. Please try again or register an account."
+            });
         }
     } catch (error) {
         console.log("Login error: " + error);
