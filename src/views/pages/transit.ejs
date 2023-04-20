@@ -2,53 +2,82 @@
   <%- include ('../partials/menu') %>
     <div class="col"><%- include ('../partials/message') %></div>
     <main style="padding: 30px; padding-top: 20px;">
-      <form>
-        <div class="form-group">
-          <label for="textInput">To Your Destination</label>
-          <input type="text" id="disabledTextInput" class="form-control" placeholder="Type Your Destination">
+      <div class="row">
+        <div class="col-md-6">
+          <form>
+            <div class="form-group">
+              <label for="textInput">To Your Destination</label>
+              <input type="text" id="disabledTextInput" class="form-control" placeholder="Type Your Destination">
+            </div>
+            <div class="form-group">
+              <label for="disabledSelect">From My Location</label>
+              <input type="text" id="disabledTextInput" class="form-control" placeholder="Type Your Location">
+            </div>
+            <div style="padding-top: 10px;">
+              <button type="submit" class="btn btn-primary">Search</button>
+            </div>
+            </fieldset>
+          </form>
+    
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col"></th>
+                <th scope="col">Estimated Time of Arrival</th>
+                <th scope="col">Total Travel Time</th>
+                <th scope="col">Estimated Cost</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row"><img src="../../resources/img/RTD_logo.png" width=100 height=100></th>
+                <td>Leave At: 10:10am<br>Arrive By: 10:25am</td>
+                <td>15 min</td>
+                <td>$3</td>
+                <td><button type="submit" class="btn btn-primary">buy</button></td>
+              </tr>
+              <tr>
+                <th scope="row"><img src="../../resources/img/uber_logo.png" width=100 height=100></th>
+                <td>Leave At: 10:10am<br>Arrive By: 10:25am</td>
+                <td>18 min</td>
+                <td>$5</td>
+                <td><button type="submit" class="btn btn-primary">buy</button></td>
+              </tr>
+              <tr>
+                <th scope="row"><img src="../../resources/img/lyft_logo.png" width=100 height=100></th>
+                <td>Leave At: 10:10am<br>Arrive By: 10:25am</td>
+                <td>30 min</td>
+                <td>$12</td>
+                <td><button type="submit" class="btn btn-primary">buy</button></td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-        <div class="form-group">
-          <label for="disabledSelect">From My Location</label>
-          <input type="text" id="disabledTextInput" class="form-control" placeholder="Type Your Location">
+        <div class="col">     
+          <div id="map"></div>
         </div>
-        <div style="padding-top: 10px;">
-          <button type="submit" class="btn btn-primary">Search</button>
-        </div>
-        </fieldset>
-      </form>
+      </div>
+        
+      <script>
+      var map_init = L.map('map',{
+          center: [39.7392, -104.9903],
+          zoom:10
+      });
+      var map = L.tileLayer ('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+      }).addTo (map_init);
 
-      <table class="table">
-        <thead>
-          <tr>
-            <th scope="col"></th>
-            <th scope="col">Estimated Time of Arrival</th>
-            <th scope="col">Total Travel Time</th>
-            <th scope="col">Estimated Cost</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <th scope="row"><img src="../../resources/img/RTD_logo.png" width=100 height=100></th>
-            <td>Leave At: 10:10am<br>Arrive By: 10:25am</td>
-            <td>15 min</td>
-            <td>$3</td>
-            <td><button type="submit" class="btn btn-primary">buy</button></td>
-          </tr>
-          <tr>
-            <th scope="row"><img src="../../resources/img/uber_logo.png" width=100 height=100></th>
-            <td>Leave At: 10:10am<br>Arrive By: 10:25am</td>
-            <td>18 min</td>
-            <td>$5</td>
-            <td><button type="submit" class="btn btn-primary">buy</button></td>
-          </tr>
-          <tr>
-            <th scope="row"><img src="../../resources/img/lyft_logo.png" width=100 height=100></th>
-            <td>Leave At: 10:10am<br>Arrive By: 10:25am</td>
-            <td>30 min</td>
-            <td>$12</td>
-            <td><button type="submit" class="btn btn-primary">buy</button></td>
-          </tr>
-        </tbody>
-      </table>
+      // use this line to add markers depending on users input
+      // var marker = L.marker([North Co, West Co]).addTo(map_init);
+      
+      var Basemaps = {
+          "MAP": map
+      }
+      var Overlaymaps = {
+          "Marker": marker
+      }
+      L.control.layers (Basemaps, Overlaymaps).addTo(map_init);
+  </script>
     </main>
+
     <%- include ('../partials/footer') %>
