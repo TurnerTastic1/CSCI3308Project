@@ -49,6 +49,10 @@ app.get('/home', (req, res) => {
   res.render('pages/home');
 });
 
+app.get('/my_trips', (req, res) => {
+  res.render('pages/my_trips');
+});
+
 // * Static resource routes * //
 app.use('/images', express.static('resources/img'));
 app.use('/styles', express.static('resources/css'));
