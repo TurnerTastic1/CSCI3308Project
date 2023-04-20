@@ -17,7 +17,8 @@ const distanceAndTimeByTransit = async (olat, olng, dlat, dlng) => {
         let bestRoute = res.routes[0];
         let elapsedDistance = bestRoute.reduce((total, current) => total + current.distance.value);
         let elapsedTime = bestRoute.reduce((total, current) => total + current.duration.value);
-        return (elapsedDistance, elapsedTime);
+        let fare = bestRoute.fare.text;
+        return (elapsedDistance, elapsedTime, fare);
     }).catch((err) => console.log(err));
 }
 
