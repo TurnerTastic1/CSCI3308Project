@@ -94,7 +94,7 @@ app.post('/login', async (req, res) => {
 
 app.get('/logout', (req, res) => {
   if (!req.session.user) {
-    return res.render('pages/login', {
+    return res.render('pages/home', {
       message: "Can't logout if you arent logged in :)"
     });
   }
