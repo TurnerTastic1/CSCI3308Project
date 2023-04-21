@@ -65,7 +65,7 @@ describe('Register!', async () => {
     chai
       .request(server)
       .post('/auth/register')
-      .send({username: 'TestAccount2', password: 'Password123', home_address: '1234 Test St', work_address: '1234 Test St'})
+      .send({username: 'TestAccount2', password: 'Password123', home_address: '1234 Test St', phone: '1234 Test St'})
       .end((err, res) => {
         expect(res).to.have.status(200);
         done();

@@ -28,7 +28,7 @@ app.post('/register', async (req, res) => {
       username: req.body.username,
       password: hash,
       home_address: req.body.home_address,
-      work_address: req.body.work_address
+      phone: req.body.phone
     };
     
     const dbResponse = await db.register(data);
