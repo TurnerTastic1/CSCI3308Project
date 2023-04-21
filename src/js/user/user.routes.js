@@ -22,6 +22,7 @@ app.get('/profile', async (req, res) => {
           message: "Log in to view!"
         });
     }
+    console.log(req.session.user);
 
     res.render('pages/profile', {
         user: req.session.user

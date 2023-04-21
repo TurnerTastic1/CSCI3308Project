@@ -6,7 +6,7 @@ const db = require('../dbConnection');
 const register = async (data) => {
   let query = `INSERT INTO users (username, password) VALUES ($1, $2) returning *;`;
   let params = [data.username, data.password];
-
+  // console.log(data);
   if (data.home_address != undefined && data.work_address != undefined) {
     query = `INSERT INTO users (username, password, home_address, work_address) VALUES ($1, $2, $3, $4) returning *;`;
     params = [data.username, data.password, data.home_address, data.work_address];
