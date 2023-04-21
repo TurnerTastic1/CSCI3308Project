@@ -24,10 +24,9 @@ app.post('/register', async (req, res) => {
     const hash = await bcrypt.hash(req.body.password, 10);
 
     // * DB section * Logic is handled in the queries.js file
-
     const data = {
-        username: req.body.username,
-        password: hash
+      username: req.body.username,
+      password: hash
     }
     const dbResponse = await db.register(data);
 

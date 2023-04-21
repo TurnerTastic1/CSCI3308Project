@@ -4,14 +4,14 @@ const db = require('../dbConnection');
 // * DB queries and logic * //
 
 const register = async (data) => {
-    const query = `INSERT INTO users (username, password) VALUES ($1, $2) returning *;`;
+  const query = `INSERT INTO users (username, password) VALUES ($1, $2) returning *;`;
 
-    try {
-        await db.one(query, [data.username, data.password]);
-        return { status: "success", message: "User registered." };
-      } catch (error) {
-        return { status: "error", error: error, message: "Internal server error or username already exists." };
-      }
+  try {
+      await db.one(query, [data.username, data.password]);
+      return { status: "success", message: "User registered." };
+    } catch (error) {
+      return { status: "error", error: error, message: "Internal server error or username already exists." };
+    }
 };
 
 const login = async (data) => {
