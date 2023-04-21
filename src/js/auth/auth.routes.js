@@ -26,8 +26,11 @@ app.post('/register', async (req, res) => {
     // * DB section * Logic is handled in the queries.js file
     const data = {
       username: req.body.username,
-      password: hash
-    }
+      password: hash,
+      home_address: req.body.home_address,
+      work_address: req.body.work_address
+    };
+    
     const dbResponse = await db.register(data);
 
     // * Response section * Logic is handled in this file

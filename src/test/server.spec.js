@@ -46,6 +46,7 @@ describe('Server!', () => {
 
 // Clear test user from database
 clearTestUser({username: 'TestAccount1'});
+clearTestUser({username: 'TestAccount2'});
 
 describe('Register!', async () => {
   
@@ -54,6 +55,17 @@ describe('Register!', async () => {
       .request(server)
       .post('/auth/register')
       .send({username: 'TestAccount1', password: 'Password123'})
+      .end((err, res) => {
+        expect(res).to.have.status(200);
+        done();
+      });
+  });
+
+  it('Postive - user creation with more info', done => {
+    chai
+      .request(server)
+      .post('/auth/register')
+      .send({username: 'TestAccount2', password: 'Password123', home_address: '1234 Test St', work_address: '1234 Test St'})
       .end((err, res) => {
         expect(res).to.have.status(200);
         done();
