@@ -34,7 +34,7 @@ const login = async (data) => {
           return { status: "error", message: "DB did not find user!" };
         }
       } catch (error) {
-        console.log("Database error - " + error);
+        // console.log("Database error - " + error);
         return { status: "error", error: error, message: "Incorrect username or password. Please register an account." };
       }
 };
