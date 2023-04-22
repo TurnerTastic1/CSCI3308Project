@@ -14,6 +14,7 @@ const db = require('../js/dbConnection');
 // ********************************************************
 // * Clear test user from DB before running tests *
 // ********************************************************
+
 const clearTestUser = async (data) => {
   try {
     const query = `SELECT username FROM users WHERE username = $1 ;`;
@@ -25,6 +26,10 @@ const clearTestUser = async (data) => {
     return console.log("Test user not found. Continuing...");
   }
 };
+
+// Clear test user from database
+clearTestUser({username: 'TestAccount1'});
+clearTestUser({username: 'TestAccount2'});
 
 describe('Server!', () => {
   // Sample test case given to test / endpoint.
@@ -39,14 +44,7 @@ describe('Server!', () => {
         done();
       });
   });
-
-  // ===========================================================================
-  // TO-DO: Part A Login unit test case
 });
-
-// Clear test user from database
-clearTestUser({username: 'TestAccount1'});
-clearTestUser({username: 'TestAccount2'});
 
 describe('Register!', async () => {
   
@@ -55,8 +53,9 @@ describe('Register!', async () => {
       .request(server)
       .post('/auth/register')
       .send({username: 'TestAccount1', password: 'Password123'})
+      .redirects(0)
       .end((err, res) => {
-        expect(res).to.have.status(200);
+        expect(res).to.have.status(302);
         done();
       });
   });
@@ -66,8 +65,9 @@ describe('Register!', async () => {
       .request(server)
       .post('/auth/register')
       .send({username: 'TestAccount2', password: 'Password123', home_address: '1234 Test St', phone: '1234 Test St'})
+      .redirects(0)
       .end((err, res) => {
-        expect(res).to.have.status(200);
+        expect(res).to.have.status(302);
         done();
       });
   });
@@ -92,8 +92,9 @@ describe('Login!', () => {
       .request(server)
       .post('/auth/login')
       .send({username: 'TestAccount1', password: 'Password123'})
+      .redirects(0)
       .end((err, res) => {
-        expect(res).to.have.status(200);
+        expect(res).to.have.status(302);
         done();
       });
   });

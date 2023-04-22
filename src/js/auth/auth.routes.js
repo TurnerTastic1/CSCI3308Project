@@ -35,7 +35,7 @@ app.post('/register', async (req, res) => {
 
     // * Response section * Logic is handled in this file
     if (dbResponse.status == "success") 
-        return res.status(200).redirect('/login');
+        return res.redirect('/login');
     else {
         console.log("Error - " + dbResponse.error);
         return res.status(400).render('pages/register', {
@@ -69,19 +69,21 @@ app.post('/login', async (req, res) => {
     }
 
     const user = dbResponse.user;
-
+    
     // * Password section * Logic is handled in this file
     // Password checking logic and session setting
     try {
         // check if password from request matches with password in DB
         const match = await bcrypt.compare(req.body.password, user.password);
+
         if (match) {
             //save user details in session like in lab 8
             req.session.user = user;
             req.session.save();
-
-            return res.status(200).redirect('/user/profile');
+            
+            return res.redirect('/user/profile');
         } else {
+          console.log("Incorrect username or password. Please try again or register an account.");
             return res.status(400).render('pages/login', {
                 message: "Incorrect username or password. Please try again or register an account."
             });
@@ -96,13 +98,13 @@ app.post('/login', async (req, res) => {
 
 app.get('/logout', (req, res) => {
   if (!req.session.user) {
-    return res.render('pages/home', {
+    return res.status(400).render('pages/home', {
       message: "Can't logout if you arent logged in :)"
     });
   }
 
   req.session.destroy();
-  res.render('pages/login', {
+  res.status(200).render('pages/login', {
       message: "Logged out Successfully"
   });
 });
