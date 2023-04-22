@@ -13,10 +13,8 @@ const db = require('./userQueries');
 // * Page rendering routes * //
 // *****************************************************
 
-// ! This is testing the DB connection ! //
 app.get('/profile', async (req, res) => {
     // This checks if the user is logged in
-    console.log(req.session.user);
     if (!req.session.user) {
         //console.log("Not logged in!");
         return res.status(400).render('pages/login', {
@@ -30,13 +28,27 @@ app.get('/profile', async (req, res) => {
     }); 
 });
 
-app.put('/updateInfo', async (req, res) => {
+app.get('/updateInfo', (req, res) => {
+    // This checks if the user is logged in
     if (!req.session.user) {
         //console.log("Not logged in!");
+        return res.status(400).render('pages/login', {
+          message: "Log in to view!"
+        });
+    }
+
+    return res.status(200).render('pages/updateInfo', {
+        user: req.session.user
+    });
+});
+
+app.post('/updateInfo', async (req, res) => {
+    if (!req.session.user) { 
         return res.status(400).render('pages/login', {
           message: "Log in to change user info!"
         });
     }
+    // console.log("Updating user info...");
 
     const data = {
         username: req.body.username || req.session.user.username,

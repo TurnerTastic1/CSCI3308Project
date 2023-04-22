@@ -11,7 +11,7 @@
           <img src="/images/profile_image.png" alt="Profile_image" style="padding: 10px; width: 100px;">
       </div>
       <div class="col">     
-        <h3 style="padding: 10px; padding-top: 35px;">Welcome <%- user.username %></h3> 
+        <h3 style="padding: 10px; padding-top: 35px;">Welcome <%- user.username %></h3>
       </div>
     </div>
     <div class="row">
@@ -23,6 +23,9 @@
                 <img src="/images/home_icon.png" alt="home_icon" style="display:inline; width: 35px; padding-right: 10px;">
                 <h5 class="card-title" style="display:inline">
                   Home</h5>
+                  <a href="/user/updateInfo">
+                    <button type="submit" class="btn btn-outline-dark btn-sm" style="float: right;">Update</button>
+                  </a>
                 <p class="card-text"><%- user.home_address %></p>
               </div>
             </div>
@@ -32,6 +35,9 @@
               <div class="card-body">
                 <img src="/images/smartphone_icon.png" alt="smartphone_icon" style="display:inline; width: 35px; padding-right: 10px;"> 
                 <h5 class="card-title" style="display:inline">Phone</h5>
+                <a href="/user/updateInfo">
+                  <button type="submit" class="btn btn-outline-dark btn-sm" style="float: right;">Update</button>
+                </a>
                 <p class="card-text"><%- user.phone %></p>
               </div>
             </div>

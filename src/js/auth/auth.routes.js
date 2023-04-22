@@ -104,7 +104,7 @@ app.get('/logout', (req, res) => {
   }
 
   req.session.destroy();
-  res.status(200).render('pages/login', {
+  res.status(200).render('pages/home', {
       message: "Logged out Successfully"
   });
 });
