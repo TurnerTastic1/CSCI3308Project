@@ -4,14 +4,20 @@ const db = require('../dbConnection');
 // * DB queries and logic * //
 
 const register = async (data) => {
-    const query = `INSERT INTO users (username, password) VALUES ($1, $2) returning *;`;
+  let query = `INSERT INTO users (username, password) VALUES ($1, $2) returning *;`;
+  let params = [data.username, data.password];
+  // console.log(data);
+  if (data.home_address != undefined && data.phone != undefined) {
+    query = `INSERT INTO users (username, password, home_address, phone) VALUES ($1, $2, $3, $4) returning *;`;
+    params = [data.username, data.password, data.home_address, data.phone];
+  }
 
-    try {
-        await db.one(query, [data.username, data.password]);
-        return { status: "success", message: "User registered." };
-      } catch (error) {
-        return { status: "error", error: error, message: "Internal server error or username already exists." };
-      }
+  try {
+      await db.one(query, params);
+      return { status: "success", message: "User registered." };
+    } catch (error) {
+      return { status: "error", error: error, message: "Internal server error or username already exists." };
+    }
 };
 
 const login = async (data) => {
@@ -28,7 +34,7 @@ const login = async (data) => {
           return { status: "error", message: "DB did not find user!" };
         }
       } catch (error) {
-        console.log("Database error - " + error);
+        // console.log("Database error - " + error);
         return { status: "error", error: error, message: "Incorrect username or password. Please register an account." };
       }
 };
