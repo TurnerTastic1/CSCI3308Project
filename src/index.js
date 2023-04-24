@@ -34,7 +34,7 @@ app.get('/', (req, res) => {
 });
 
 app.get('/transit', (req, res) => {
-  res.render('pages/transit');
+  res.render('pages/transit', {apikey: process.env.JUNNG_KIM_GOOGLE_MAP_API});
 });
 
 app.get('/login', (req, res) => {
@@ -54,6 +54,15 @@ app.get('/home', (req, res) => {
 app.get('/my_trips', (req, res) => {
   res.render('pages/my_trips');
 });
+
+app.get('/auto_complete', (req, res) => {
+  res.render('pages/autotest');
+})
+
+app.post('/displayMap', (req, res) => {
+  console.log(req.body.source,
+              req.body.destination);
+})
 
 // * Static resource routes * //
 app.use('/images', express.static('resources/img'));
