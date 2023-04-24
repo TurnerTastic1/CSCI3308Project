@@ -55,14 +55,6 @@ app.get('/my_trips', (req, res) => {
   res.render('pages/my_trips');
 });
 
-app.get('/auto_complete', (req, res) => {
-  res.render('pages/autotest');
-})
-
-app.post('/displayMap', (req, res) => {
-  console.log(req.body.source,
-              req.body.destination);
-})
 
 // * Static resource routes * //
 app.use('/images', express.static('resources/img'));
