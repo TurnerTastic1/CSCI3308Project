@@ -67,7 +67,8 @@ app.post('/updateInfo', async (req, res) => {
     } else {
         console.log("Error while updating user info- " + dbResponse.error);
         return res.status(400).render('pages/profile', {
-            message: dbResponse.message
+            message: dbResponse.message,
+            user: req.session.user
         });
     }
 
