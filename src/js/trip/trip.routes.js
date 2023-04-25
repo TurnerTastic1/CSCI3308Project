@@ -12,6 +12,14 @@ const db = require('./tripQueries');
 // * Page rendering routes * //
 // *****************************************************
 
+app.get('/my_trips', (req, res) => {
+    if (!req.session.user) {
+      return res.status(400).render('pages/login', {
+        message: "Log in to view!"
+      });
+    }
+    res.render('pages/my_trips', {apikey: process.env.JUNNG_KIM_GOOGLE_MAP_API});
+  });
 
 app.post('/createTrip', async (req, res) => {
     if (!req.session.user) {
