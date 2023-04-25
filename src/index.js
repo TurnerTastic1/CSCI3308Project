@@ -47,22 +47,11 @@ app.get('/login', (req, res) => {
 });
 
 app.get('/register', (req, res) => {
-    res.render('pages/register', {
-      message: "Username and password required! Other info may be filled out later."
-    });
+    res.render('pages/register');
 });
 
 app.get('/home', (req, res) => {
   res.render('pages/home');
-});
-
-app.get('/my_trips', (req, res) => {
-  if (!req.session.user) {
-    return res.status(400).render('pages/login', {
-      message: "Log in to view!"
-    });
-  }
-  res.render('pages/my_trips', {apikey: process.env.JUNNG_KIM_GOOGLE_MAP_API});
 });
 
 
