@@ -52,7 +52,7 @@ app.get('/home', (req, res) => {
 });
 
 app.get('/my_trips', (req, res) => {
-  res.render('pages/my_trips');
+  res.render('pages/my_trips', {apikey: process.env.JUNNG_KIM_GOOGLE_MAP_API});
 });
 
 
@@ -83,3 +83,4 @@ try {
 } catch (error) {
   console.log('Server failed to start: ' + error);
 }
+
