@@ -34,6 +34,11 @@ app.get('/', (req, res) => {
 });
 
 app.get('/transit', (req, res) => {
+  if (!req.session.user) {
+    return res.status(400).render('pages/login', {
+      message: "Log in to view!"
+    });
+  }
   res.render('pages/transit', {apikey: process.env.JUNNG_KIM_GOOGLE_MAP_API});
 });
 
@@ -42,17 +47,11 @@ app.get('/login', (req, res) => {
 });
 
 app.get('/register', (req, res) => {
-    res.render('pages/register', {
-      message: "Username and password required! Other info may be filled out later."
-    });
+    res.render('pages/register');
 });
 
 app.get('/home', (req, res) => {
   res.render('pages/home');
-});
-
-app.get('/my_trips', (req, res) => {
-  res.render('pages/my_trips', {apikey: process.env.JUNNG_KIM_GOOGLE_MAP_API});
 });
 
 
@@ -66,12 +65,15 @@ app.use('/styles', express.static('resources/css'));
 const authRoutes = require("./js/auth/auth.routes");
 const userRoutes = require("./js/user/user.routes");
 const apiRoutes = require("./js/services/api.service");
+const tripRoutes = require("./js/trip/trip.routes");
 
 // * Routes for all authentication is localhost:3000/auth + the route located on auth.routes.js * //
 // * For example, localhost:3000/auth/register will route to the register page * // 
 app.use('/auth', authRoutes);
 
 app.use('/user', userRoutes);
+
+app.use('/trip', tripRoutes);
 
 // app.use('/api', apiRoutes);
 

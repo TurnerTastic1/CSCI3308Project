@@ -63,6 +63,8 @@ app.post('/updateInfo', async (req, res) => {
         req.session.user.username = data.username;
         req.session.user.home_address = data.home_address;
         req.session.user.phone = data.phone;
+        req.session.save();
+        
         return res.status(200).redirect('/user/profile');
     } else {
         console.log("Error while updating user info- " + dbResponse.error);
