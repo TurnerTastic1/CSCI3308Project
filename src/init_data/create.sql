@@ -10,7 +10,7 @@ CREATE TABLE users(
 DROP TABLE IF EXISTS trips CASCADE;
 CREATE TABLE trips(
     trip_id SERIAL PRIMARY KEY NOT NULL,
-    user_id SERIAL NOT NULL,
+    user_id INTEGER NOT NULL,
     departing CHAR(60) NOT NULL,
     destination CHAR(60) NOT NULL,
     purpose VARCHAR(200),
@@ -21,6 +21,6 @@ CREATE TABLE trips(
 
 DROP TABLE IF EXISTS users_to_trips CASCADE;
 CREATE TABLE users_to_trips(
-    trip_id INTEGER FOREIGN KEY REFERENCES trips (trip_id),
-    user_id INTEGER FOREIGN KEY REFERENCES users (user_id)
+    trip_id INTEGER NOT NULL REFERENCES trips (trip_id),
+    user_id INTEGER NOT NULL REFERENCES users (user_id)
 );
