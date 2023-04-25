@@ -16,12 +16,12 @@ const createTrip = async (data) => {
 
 
 const updateTrip = async (data) => {
-  const query = `UPDATE trips SET departing=$2, destination=$3, time=$4, seats=$5, purpose=$6 WHERE user_id=$1 returning *;`;
-  const params = [data.user_id, data.departing, data.destination, data.time, data.seats, data.purpose];
+  const query = `UPDATE trips SET user_id=$2, departing=$3, destination=$4, time=$5, seats=$6, purpose=$7 WHERE trip_id=$1 returning *;`;
+  const params = [data.trip_id, data.user_id, data.departing, data.destination, data.time, data.seats, data.purpose];
 
   try {
     await db.one(query, params);
-    return { status: "success", message: "User updated." };
+    return { status: "success", message: "Trip updated." };
   } catch (error) {
     return { status: "error", error: error, message: "Internal server error." };
   }
