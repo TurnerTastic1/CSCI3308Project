@@ -1,0 +1,74 @@
+<%- include ('../partials/head') %>
+  <%- include ('../partials/menu') %>
+    <div class="col"><%- include ('../partials/message') %></div>
+
+    <main>
+        <div class="container">
+            <!-- THE REST OF YOUR HTML CODE GOES HERE -->
+            <h1 style="padding-top: 20px; padding-bottom: 10px;">
+                <centre>Update Trip</centre>
+            </h1>
+            <form action="/trip/createTrip" method="POST" style="padding-top: 10px;">         
+                <div class="row" style="padding-bottom: 20px;">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="disabledSelect">Your Departing Location</label>
+                            <input name="departing" type="text" id="source" name="source"class="form-control" placeholder="Type Your Location">
+                        </div>
+                    </div>
+                    <div class="col">     
+                        <div class="form-group">
+                            <label for="textInput">Your Destination</label>
+                            <input name="destination" type="text" id="destination" name="destination" class="form-control" placeholder="Type Your Destination">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group" style="padding-bottom: 20px;">
+                    <label for="disabledSelect">Purpose of Travel</label>
+                    <input name="purpose" type="text" id="disabledTextInput" class="form-control" placeholder="Type your purpose of travel here">
+                </div>
+                <div class="row" style="padding-bottom: 20px;">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <div class="form-group">
+                                <label for="disabledSelect">Number of Available Seats</label>
+                                    <select name="seats" class="form-select" aria-label="Default select example">
+                                        <option selected>Select a number</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">     
+                            <div class="form-group">
+                                <label for="textInput">Time of Departure</label>
+                                <input name="time" type="datetime-local" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">  
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <div>
+                                    <button type="submit" class="btn btn-outline-dark" >Update Trip</button>
+                                </div>
+                            </div>
+                        </div>   
+                        <div class="col">
+                            <div class="form-group">
+                                <div>
+                                    <button type="submit" class="btn btn-outline-danger" >Delete Trip</button>
+                            </div>
+                        </div>
+                    </div>
+                </div> 
+            </form>
+        </div>
+    </main>
+
+    <%- include ('../partials/footer') %>
