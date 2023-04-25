@@ -1,36 +1,52 @@
 <%- include ('../partials/head') %>
-<%- include ('../partials/menu') %>
-<div class="col"><%- include ('../partials/message') %></div>
+  <%- include ('../partials/menu') %>
+    <div class="col"><%- include ('../partials/message') %></div>
 
-<main>
-  <div class="container">
-    <!-- THE REST OF YOUR HTML CODE GOES HERE -->
-    <h1><centre>Update info</centre></h1>
-    <form action="/user/updateInfo" method="POST">
-      <div class="row mb-3">
-        <label for="colFormLabel" class="col-sm-2 col-form-label">Username</label>
-        <div class="col-sm-10">
-          <input type="text" class="form-control" id="colFormLabel" name="username" placeholder="Current: <%- user.username %>">
-        </div>
-      </div>
-      <div class="row mb-3">
-        <label for="colFormLabel" class="col-sm-2 col-form-label">Home Address</label>
-        <div class="col-sm-10">
-          <input type="text" class="form-control" id="colFormLabel" name="home_address" placeholder="Current: <%- user.home_address %>">
-        </div>
-      </div>
-      <div class="row mb-3">
-        <label for="colFormLabel" class="col-sm-2 col-form-label">Phone Number</label>
-        <div class="col-sm-10">
-          <input type="text" class="form-control" id="colFormLabel" name="phone" placeholder="Current: <%- user.phone %>">
-        </div>
-      </div>
-      <div class="mb-3 form-check">
-        <button type="submit" class="btn btn-primary">Update</button>
-      </div>
-    </form>
+    <main>
+      <div class="container">
+        <!-- THE REST OF YOUR HTML CODE GOES HERE -->
+        <h1 style="padding-top: 20px; padding-bottom: 10px;">
+          <centre>Update info</centre>
+        </h1>
+        <form action="/user/updateInfo" method="POST">
+          <div class="row" style="padding-bottom: 20px; padding-left:.75rem;">
+            <div class="card w-80">
+              <div class="card-body">
+                <img src="/images/profile_image.png" alt="Profile_image"
+                  style="display:inline; width: 35px; padding-right: 10px; padding-bottom:5px;">
+                <h5 class="card-title" style="display:inline">Username</h5>
+                <input type="text" class="form-control" id="colFormLabel" name="username"
+                  placeholder="Current: <%- user.username %>">
+              </div>
+            </div>
+          </div>
+          <div class="row" style="padding-bottom: 20px; padding-left:.75rem;">
+            <div class="card w-80">
+              <div class="card-body">
+                <img src="/images/home_icon.png" alt="home_icon"
+                  style="display:inline; width: 35px; padding-right: 10px; padding-bottom:5px;">
+                <h5 class="card-title" style="display:inline">Home Address</h5>
+                <input type="text" class="form-control" id="colFormLabel" name="home_address"
+                  placeholder="Current: <%- user.home_address %>">
+              </div>
+            </div>
+          </div>
+          <div class="row" style="padding-bottom: 20px; padding-left:.75rem;">
+            <div class="card w-80">
+              <div class="card-body">
+                <img src="/images/smartphone_icon.png" alt="smartphone_icon"
+                  style="display:inline; width: 35px; padding-right: 10px; padding-bottom:5px;">
+                <h5 class="card-title" style="display:inline">Phone Number</h5>
+                <input type="text" class="form-control" id="colFormLabel" name="phone"
+                  placeholder="Current: <%- user.phone %>">
+              </div>
+            </div>
+            <div class="mb-3 form-check" style="padding-top:20px">
+              <button type="submit" class="btn btn-outline-dark btn-lg">Update</button>
+            </div>
+        </form>
 
-  </div>
-</main>
+      </div>
+    </main>
 
-<%- include ('../partials/footer') %>
+    <%- include ('../partials/footer') %>
