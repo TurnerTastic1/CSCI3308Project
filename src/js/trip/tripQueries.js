@@ -2,6 +2,18 @@ const db = require('../dbConnection');
 
 // * DB queries and logic * //
 
+const getUserTrips = async (data) => {
+    const query = `SELECT * FROM trips WHERE user_id=$1;`;
+    const params = [data];
+    
+    try {
+        const dbResponse = await db.any(query, params);
+        return { status: "success", message: "User trips retrieved.", data: dbResponse };
+    } catch (error) {
+        return { status: "error", error: error, message: "Internal server error." };
+    }
+}
+
 const createTrip = async (data) => {
   const query = `INSERT INTO trips (user_id, departing, destination, time, seats, purpose) VALUES ($1, $2, $3, $4, $5, $6) returning *;`;
   const params = [data.user_id, data.departing, data.destination, data.time, data.seats, data.purpose];
@@ -30,5 +42,6 @@ const updateTrip = async (data) => {
 
 module.exports = {
   createTrip,
-  updateTrip
+  updateTrip,
+  getUserTrips
 };
