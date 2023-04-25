@@ -34,7 +34,7 @@ app.get('/', (req, res) => {
 });
 
 app.get('/transit', (req, res) => {
-  res.render('pages/transit');
+  res.render('pages/transit', {apikey: process.env.JUNNG_KIM_GOOGLE_MAP_API});
 });
 
 app.get('/login', (req, res) => {
@@ -52,8 +52,9 @@ app.get('/home', (req, res) => {
 });
 
 app.get('/my_trips', (req, res) => {
-  res.render('pages/my_trips');
+  res.render('pages/my_trips', {apikey: process.env.JUNNG_KIM_GOOGLE_MAP_API});
 });
+
 
 // * Static resource routes * //
 app.use('/images', express.static('resources/img'));
@@ -82,3 +83,4 @@ try {
 } catch (error) {
   console.log('Server failed to start: ' + error);
 }
+
