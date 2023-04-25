@@ -18,3 +18,9 @@ CREATE TABLE trips(
     seats INTEGER,
     FOREIGN KEY (user_id) REFERENCES users (user_id)
 );
+
+DROP TABLE IF EXISTS users_to_trips CASCADE;
+CREATE TABLE users_to_trips(
+    trip_id INTEGER FOREIGN KEY REFERENCES trips (trip_id),
+    user_id INTEGER FOREIGN KEY REFERENCES users (user_id)
+);

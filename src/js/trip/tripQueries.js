@@ -27,8 +27,31 @@ const updateTrip = async (data) => {
   }
 };
 
+const addRiderToTrip = async (data) => {
+  const query = `INSERT INTO users_to_trips (user_id, trip_id) VALUES ($1, $2) returning *;`
+  const params = [data.user_id, data.trip_id];
+  try {
+    await db.one(query, params);
+    return { status: "success", message: "Rider added to trip." };
+  } catch (error) {
+      return { status: "error", error: error, message: "Internal server error." };
+  }
+}
+
+const removeRiderFromTrip = async (data) => {
+  const query = `DELETE FROM users_to_trips WHERE user_id=$1, trip_id=$2;`
+  const params = [data.user_id, data.trip_id];
+  try {
+    await db.one(query, params);
+    return { status: "success", message: "Rider removed from trip." };
+  } catch (error) {
+      return { status: "error", error: error, message: "Internal server error." };
+  }
+}
 
 module.exports = {
   createTrip,
-  updateTrip
+  updateTrip,
+  addRiderToTrip,
+  removeRiderFromTrip
 };
