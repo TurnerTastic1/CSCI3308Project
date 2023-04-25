@@ -69,29 +69,28 @@
         </div>
             <ul class="list-group list-group-flush">
                 <!--  -->
-                <li class="list-group-item">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <p>Date: 1/1/23 9:00AM</p>
-                            <p>From: XYZ</p>
-                            <p>To: ZTX</p>
-                            <p>Purpose: ....</p>
-                        </div>
-                        <div class="col">    
-                            <p>Seats Taken:</p> 
-                            <p>John Smith #5555555555</p>
-                            <p>Jane Brown #2222222222</p>
-                        </div>
-                        <div class="col">
-                            <button type="submit" class="btn btn-outline-dark" style="float: right;">Edit</button>
-                        </div>
-                    </div>
-                    </li>
-                    <!--  -->
-                    <li class="list-group-item">Dapibus ac facilisis in</li>
-                    <li class="list-group-item">Vestibulum at eros</li>
-                    <li class="list-group-item">....</li>
-                </ul>
+                <% if(data) {
+                    data.forEach(function(item) {%>
+                        <li class="list-group-item">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p> <b>Date:</b> <%- item.time %></p>
+                                    <p> <b>From:</b> <%- item.departing %></p>
+                                    <p> <b>To:</b> <%- item.destination %></p>
+                                    <p> <b>Purpose:</b> <%- item.purpose %></p>
+                                </div>
+                                <div class="col">    
+                                    <b>Seats:</b> 
+                                    <p><%- item.seats %></p>
+                                    <p>TBC</p>
+                                </div>
+                                <div class="col">
+                                    <button type="submit" class="btn btn-outline-dark" style="float: right;">Edit</button>
+                                </div>
+                            </div>
+                            </li>
+                     <%})
+                }%>
             </div> 
         </div>
     </div>
