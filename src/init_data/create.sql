@@ -9,7 +9,7 @@ CREATE TABLE users(
 
 DROP TABLE IF EXISTS trips CASCADE;
 CREATE TABLE trips(
-    trips_id SERIAL PRIMARY KEY NOT NULL,
+    trip_id SERIAL PRIMARY KEY NOT NULL,
     user_id SERIAL NOT NULL,
     departing CHAR(60) NOT NULL,
     destination CHAR(60) NOT NULL,
