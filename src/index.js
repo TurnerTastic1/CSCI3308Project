@@ -47,9 +47,7 @@ app.get('/login', (req, res) => {
 });
 
 app.get('/register', (req, res) => {
-    res.render('pages/register', {
-      message: "Username and password required! Other info may be filled out later."
-    });
+    res.render('pages/register');
 });
 
 app.get('/home', (req, res) => {
