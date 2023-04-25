@@ -64,10 +64,7 @@ const removeRiderFromTrip = async (data) => {
 module.exports = {
   createTrip,
   updateTrip,
-<<<<<<< HEAD
-  getUserTrips
-=======
+  getUserTrips,
   addRiderToTrip,
   removeRiderFromTrip
->>>>>>> 67fe6a5393c056eaca07b87d86355bd7132cd3c7
 };
