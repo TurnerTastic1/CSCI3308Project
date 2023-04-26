@@ -58,6 +58,7 @@ app.get('/home', (req, res) => {
 // * Static resource routes * //
 app.use('/images', express.static('resources/img'));
 app.use('/styles', express.static('resources/css'));
+app.use('/modal', express.static('js/modal'));
 
 // *****************************************************
 // * API routes * //

@@ -1,0 +1,39 @@
+.modal {
+    --gap: 15px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    padding: var(--gap);
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.modal__inner {
+    background: #ffffff;
+    width: 100%;
+    max-width: 800px;
+    overflow: hidden;
+    border-radius: 4px;
+}
+
+.modal__top {
+    display: flex;
+    align-items: center;
+    background-color: #eeee;
+}
+
+.modal__title {
+    flex-grow: 1;
+    padding: 0 var(--gap);
+    font-size: 20px
+}
+
+.modal__content {
+    padding: 0 var(--gap);
+    line-height: 1.5;
+}
