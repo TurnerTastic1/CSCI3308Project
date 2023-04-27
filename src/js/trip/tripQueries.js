@@ -8,7 +8,16 @@ const getAllTrips = async (data) => {
     const params = [data.user_id];
     try {
         const dbResponse = await db.any(query, params);
-        return { status: "success", message: "All trips retrieved.", data: dbResponse };
+        const filteredResponse = [];
+        for (let i = 0; i < dbResponse.length; i++) {
+            const trip_id = dbResponse[i].trip_id;
+            const query = `SELECT * FROM users_to_trips WHERE trip_id = $1 AND user_id = $2 ;`;
+            const params = [trip_id, data.user_id];
+            const dbResponse2 = await db.any(query, params);
+
+            if (dbResponse2.length === 0) filteredResponse.push(dbResponse[i]);
+        }
+        return { status: "success", message: "All trips retrieved.", data: filteredResponse };
     } catch (error) {
         return { status: "error", error: error, message: "Internal server error." };
     }
@@ -27,14 +36,35 @@ const getTripByID = async (data) => {
 }
 
 const getUserTrips = async (data) => {
+    const trips = [];
+    const params = [data.user_id];
+    const relationQuery = `SELECT * FROM users_to_trips WHERE user_id=$1;`;
+
+    try {
+        const dbResponse = await db.any(relationQuery, params);
+        const tripIDs = [];
+        for (let i = 0; i < dbResponse.length; i++) {
+            tripIDs.push(dbResponse[i].trip_id);
+        }
+        for (let i = 0; i < tripIDs.length; i++) {
+            const query = `SELECT * FROM trips WHERE trip_id=$1;`;
+            const params = [tripIDs[i]];
+            const dbResponse = await db.one(query, params);
+            trips.push(dbResponse);
+        }
+    } catch (error) {
+        return { status: "error", error: error, message: "Error fetching trips from users_to_trips table." };
+    }
+
     const query = `SELECT * FROM trips WHERE user_id=$1;`;
-    const params = [data];
-    
     try {
         const dbResponse = await db.any(query, params);
-        return { status: "success", message: "User trips retrieved.", data: dbResponse };
+        for (let i = 0; i < dbResponse.length; i++) {
+            trips.push(dbResponse[i]);
+        }
+        return { status: "success", message: "User trips retrieved.", data: trips };
     } catch (error) {
-        return { status: "error", error: error, message: "Internal server error." };
+        return { status: "error", error: error, message: "Error fetching trips from trip table." };
     }
 }
 
@@ -100,17 +130,17 @@ const getRidersForTrip = async (data) => {
     });
 }
 
-const getTripsForRider = async (data) => {
-  const query = `SELECT * FROM users_to_trips WHERE user_id=$1`;
-  const params = [data.user_id];
+// const getTripsForRider = async (data) => {
+//   const query = `SELECT * FROM users_to_trips WHERE user_id=$1`;
+//   const params = [data.user_id];
 
-  db.any(query, params)
-    .then(data => {
-      return data;
-    }).catch(error => {
-      return { status: "error", error: error, message: "Trips from rider request failed, all is doomed! Panic!" };
-    });
-}
+//   db.any(query, params)
+//     .then(data => {
+//       return data;
+//     }).catch(error => {
+//       return { status: "error", error: error, message: "Trips from rider request failed, all is doomed! Panic!" };
+//     });
+// }
 
 const removeRiderFromTrip = async (data) => {
   const query = `DELETE FROM users_to_trips WHERE user_id=$1, trip_id=$2;`
@@ -132,6 +162,5 @@ module.exports = {
   getUserTrips,
   addRiderToTrip,
   getRidersForTrip,
-  getTripsForRider,
   removeRiderFromTrip
 };

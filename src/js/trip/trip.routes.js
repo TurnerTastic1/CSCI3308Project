@@ -20,14 +20,17 @@ app.use('/modal', express.static('js/modal'));
 // *****************************************************
 
 const getUserTrips = async (user_id) => {
-    const dbResponse = await db.getUserTrips(user_id);
+    const data = {
+        user_id: user_id
+    };
+    const dbResponse = await db.getUserTrips(data);
     if (dbResponse.status === "success") {
         return dbResponse.data;
     } else {
         console.log("Error retrieving user trips." + dbResponse.message + " " + dbResponse.error);
         return [];
     }
-}
+};
 
 const getAllTrips = async (user_id) => {
     const data = {

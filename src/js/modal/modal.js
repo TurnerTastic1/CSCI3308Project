@@ -16,9 +16,7 @@ function showModal(titleHtml, contentHtml, buttons) {
         </p>
       </div>
       <div class="modal__bottom">
-        <button class="modal__button" type="button">
-          Join
-        </button>
+        <button class="modal__button" type="button">Join</button>
       </div>
     </div>
     `;
