@@ -22,6 +22,10 @@ const getUserTrips = async (user_id) => {
     }
 }
 
+// *****************************************************
+// * Page rendering routes * //
+// *****************************************************
+
 app.get('/my_trips', async (req, res) => {
     if (!req.session.user) {
       return res.status(400).render('pages/login', {
@@ -34,7 +38,27 @@ app.get('/my_trips', async (req, res) => {
         apikey: process.env.JUNNG_KIM_GOOGLE_MAP_API,
         data: trips
     });
-  });
+});
+
+app.post('/editTrips', async (req, res) => {
+    // This checks if the user is logged in
+    if (!req.session.user) {
+        //console.log("Not logged in!");
+        return res.status(400).render('pages/login', {
+          message: "Log in to view!"
+        });
+    }
+    const id = req.body.tripID;
+    // console.log(id);
+    return res.status(200).render('pages/edit_trip', {
+        user: req.session.user,
+        tripID: id
+    });
+});
+
+// *****************************************************
+// * API crud routes * //
+// *****************************************************
 
 app.post('/createTrip', async (req, res) => {
     if (!req.session.user) {
@@ -78,18 +102,104 @@ app.post('/createTrip', async (req, res) => {
     }
 });
 
-app.get('/editTrips', async (req, res) => {
-    // This checks if the user is logged in
+app.post('/updateTrip', async (req, res) => {
     if (!req.session.user) {
-        //console.log("Not logged in!");
         return res.status(400).render('pages/login', {
-          message: "Log in to view!"
+          message: "Log in to update a trip!"
         });
     }
-    return res.status(200).render('pages/edit_trip', {
-        user: req.session.user
-    });
+    let trips = await getUserTrips(req.session.user.user_id);
+
+    let data = {
+        trip_id: req.body.tripID,
+    }
+
+    const currentTrip = await db.getTripByID(data);
+
+    if (currentTrip.status === "error") {
+        console.log(currentTrip);
+        return res.status(400).render('pages/my_trips', {
+            message: currentTrip.message,
+            apikey: process.env.JUNNG_KIM_GOOGLE_MAP_API,
+            data: trips
+        });
+    }
+
+    // * Seat validation * //
+    if (req.body.seats == "Select a number") {
+        req.body.seats = currentTrip.data.seats;
+    }
+
+    data = {
+        trip_id: req.body.tripID,
+        user_id: req.session.user.user_id,
+        departing: req.body.departing || currentTrip.data.departing,
+        destination: req.body.destination || currentTrip.data.destination,
+        time: req.body.time || currentTrip.data.time,
+        seats: req.body.seats || currentTrip.data.seats,
+        purpose: req.body.purpose || currentTrip.data.purpose
+    }
+
+    const dbResponse = await db.updateTrip(data);
+
+    if (dbResponse.status === "error") {
+        console.log(dbResponse.error);
+        return res.status(400).render('pages/my_trips', {
+            message: "Trip update failed!",
+            apikey: process.env.JUNNG_KIM_GOOGLE_MAP_API,
+            data: trips
+        });
+    } else {
+        trips = await getUserTrips(req.session.user.user_id);
+        return res.status(200).render('pages/my_trips', {
+            message: "Trip updated!",
+            apikey: process.env.JUNNG_KIM_GOOGLE_MAP_API,
+            data: trips
+        })
+    }
 });
+
+app.post('/deleteTrip', async (req, res) => {
+    if (!req.session.user) {
+        return res.status(400).render('pages/login', {
+          message: "Log in to delete a trip!"
+        });
+    }
     
+    let trips = await getUserTrips(req.session.user.user_id);
+
+    if (!req.body.tripID) {
+        return res.status(400).render('pages/my_trips', {
+            message: "Internal server error! - No trip ID recieved",
+            apikey: process.env.JUNNG_KIM_GOOGLE_MAP_API,
+            data: trips
+        });
+    }    
+
+    // * Package data to send to db * //
+    const data = {
+        trip_id: req.body.tripID
+    };
+    const dbResponse = await db.deleteTrip(data);
+
+    if (dbResponse.status === "error") {
+        console.log(dbResponse.error);
+        return res.status(400).render('pages/my_trips', {
+            message: "Trip deletion failed!",
+            apikey: process.env.JUNNG_KIM_GOOGLE_MAP_API,
+            data: trips
+        });
+    }
+
+    trips = await getUserTrips(req.session.user.user_id);
+    return res.render('pages/my_trips', {
+        message: "Trip deleted!",
+        apikey: process.env.JUNNG_KIM_GOOGLE_MAP_API,
+        data: trips
+    })
+
+
+});
+
 
 module.exports = app;
