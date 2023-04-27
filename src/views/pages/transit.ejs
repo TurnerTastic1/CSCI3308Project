@@ -30,39 +30,45 @@
                     </fieldset>
                   </form>
 
-                  <table class="table" style="text-align: center; margin: auto;">
-                    <thead>
-                      <tr>
-                        <th scope="col">Transportation</th>
-                        <th scope="col">Estimated Time</th>
-                        <th scope="col">Travel Time</th>
-                        <th scope="col">Estimated Cost</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <th scope="row"><img src="images/Uber_logo.png" width=100 height=100></th>
-                        <td>Leave At: 10:10am<br>Arrive By: 10:25am</td>
-                        <td>15 min</td>
-                        <td>$3</td>
-                        <td><button type="button" onclick="showModal('hello','<p>hello</p>','<button>bye</button>')" class="btn btn-outline-dark" style="float: right;">Info</button></td>
-                      </tr>
-                      <tr>
-                        <th scope="row"><img src="images/RTD_logo.png" width=100 height=100></th>
-                        <td>Leave At: 10:10am<br>Arrive By: 10:25am</td>
-                        <td>18 min</td>
-                        <td>$5</td>
-                        <td><button type="button" onclick="showModal('hello','<p>hello</p>','<button>bye</button>')" class="btn btn-outline-dark" style="float: right;">Info</button></td>
-                      </tr>
-                      <tr>
-                        <th scope="row"><img src="images/Bcycle_logo.png" width=100 height=100></th>
-                        <td>Leave At: 10:10am<br>Arrive By: 10:25am</td>
-                        <td>30 min</td>
-                        <td>$12</td>
-                        <td><button type="button" onclick="showModal('hello','<p>hello</p>','<button>bye</button>')" class="btn btn-outline-dark" style="float: right;">Info</button></td>
-                      </tr>
-                    </tbody>
-                  </table>
+                  <div style="padding-top: 40px;" >
+                    <div class="card w-80">
+                      <div class="card-body">
+                          <h5 class="card-title" style="display:inline">My Trips</h5>
+                      </div>
+                          <ul class="list-group list-group-flush">
+                              <!--  -->
+                              <% if(data && data != []) {
+                                  data.forEach(function(item) {%>
+                                      <li class="list-group-item">
+                                          <div class="row">
+                                              <div class="col-md-6">
+                                                  <p> <b>Date:</b> <%- item.time %></p>
+                                                  <p> <b>From:</b> <%- item.departing %></p>
+                                                  <p> <b>To:</b> <%- item.destination %></p>
+                                                  <p> <b>Purpose:</b> <%- item.purpose %></p>
+                                              </div>
+                                              <div class="col">    
+                                                  <b>Seats:</b> 
+                                                  <p><%- item.seats %></p>
+                                                  <p>TBC</p>
+                                              </div>
+                                              <div class="col">
+                                                <button type="button" onclick="showModal('info','<p>info</p>','<button>bye</button>')" class="btn btn-outline-dark" style="float: right;">Info</button>
+                                                <form action="/trip/joinTrip" method="POST">
+                                                  <input type="hidden" id="tripID" name="tripID" value="<%- item.trip_id %>">
+                                                  <button type="submit" class="btn btn-outline-dark" style="float: right;">Join</button>
+                                              </form>
+                                              </div>
+                                          </div>
+                                          </li>
+                                   <%})
+                              } else {
+                                console.log("No trips in database! Please add a trip." + data);
+                                %>
+                                <p>No trips in database! Please add a trip.</p>
+                                <% } %>
+                          </div> 
+                      </div>
                 </div>
                 <div class="col">
                   <div id="map"></div>

@@ -5,26 +5,62 @@
 
 const express = require('express'); // To build an application server or API
 const app = express.Router();
-
 const db = require('./tripQueries');
 
+// ********************************************************
+// * Static resource routes * //
+// ********************************************************
+
+app.use('/images', express.static('resources/img'));
+app.use('/styles', express.static('resources/css'));
+app.use('/modal', express.static('js/modal'));
+
 // *****************************************************
-// * Page rendering routes * //
+// * Common functions * //
 // *****************************************************
 
 const getUserTrips = async (user_id) => {
-    const dbResponse = await db.getUserTrips(user_id);
+    const data = {
+        user_id: user_id
+    };
+    const dbResponse = await db.getUserTrips(data);
     if (dbResponse.status === "success") {
         return dbResponse.data;
     } else {
         console.log("Error retrieving user trips." + dbResponse.message + " " + dbResponse.error);
         return [];
     }
-}
+};
+
+const getAllTrips = async (user_id) => {
+    const data = {
+        user_id: user_id
+    }
+    const dbResponse = await db.getAllTrips(data);
+    if (dbResponse.status === "success") {
+        return dbResponse.data;
+    } else {
+        console.log("Error retrieving all trips." + dbResponse.message + " " + dbResponse.error);
+        return [];
+    }
+};
 
 // *****************************************************
 // * Page rendering routes * //
 // *****************************************************
+
+app.get('/transit', async (req, res) => {
+    if (!req.session.user) {
+      return res.status(400).render('pages/login', {
+        message: "Log in to view!"
+      });
+    }
+    const trips = await getAllTrips(req.session.user.user_id);
+    res.render('pages/transit', {
+        apikey: process.env.JUNNG_KIM_GOOGLE_MAP_API,
+        data: trips
+    });
+});
 
 app.get('/my_trips', async (req, res) => {
     if (!req.session.user) {
@@ -36,7 +72,8 @@ app.get('/my_trips', async (req, res) => {
     const trips = await getUserTrips(req.session.user.user_id);
     res.render('pages/my_trips', {
         apikey: process.env.JUNNG_KIM_GOOGLE_MAP_API,
-        data: trips
+        data: trips,
+        active_user: req.session.user
     });
 });
 
@@ -57,7 +94,7 @@ app.post('/editTrips', async (req, res) => {
 });
 
 // *****************************************************
-// * API crud routes * //
+// * Trip crud routes * //
 // *****************************************************
 
 app.post('/createTrip', async (req, res) => {
@@ -71,7 +108,8 @@ app.post('/createTrip', async (req, res) => {
         return res.status(400).render('pages/my_trips', {
           message: "Please fill out all fields!",
           apikey: process.env.JUNNG_KIM_GOOGLE_MAP_API,
-          data: trips
+          data: trips,
+          active_user: req.session.user
         });
     }
 
@@ -91,13 +129,15 @@ app.post('/createTrip', async (req, res) => {
         return res.status(400).render('pages/my_trips', {
             message: "Trip creation failed!",
             apikey: process.env.JUNNG_KIM_GOOGLE_MAP_API,
-            data: trips
+            data: trips,
+            active_user: req.session.user
         });
     } else {
         return res.status(200).render('pages/my_trips', {
             message: "Trip created!",
             apikey: process.env.JUNNG_KIM_GOOGLE_MAP_API,
-            data: trips
+            data: trips,
+            active_user: req.session.user
         })
     }
 });
@@ -121,7 +161,8 @@ app.post('/updateTrip', async (req, res) => {
         return res.status(400).render('pages/my_trips', {
             message: currentTrip.message,
             apikey: process.env.JUNNG_KIM_GOOGLE_MAP_API,
-            data: trips
+            data: trips,
+            active_user: req.session.user
         });
     }
 
@@ -147,14 +188,16 @@ app.post('/updateTrip', async (req, res) => {
         return res.status(400).render('pages/my_trips', {
             message: "Trip update failed!",
             apikey: process.env.JUNNG_KIM_GOOGLE_MAP_API,
-            data: trips
+            data: trips,
+            active_user: req.session.user
         });
     } else {
         trips = await getUserTrips(req.session.user.user_id);
         return res.status(200).render('pages/my_trips', {
             message: "Trip updated!",
             apikey: process.env.JUNNG_KIM_GOOGLE_MAP_API,
-            data: trips
+            data: trips,
+            active_user: req.session.user
         })
     }
 });
@@ -172,7 +215,8 @@ app.post('/deleteTrip', async (req, res) => {
         return res.status(400).render('pages/my_trips', {
             message: "Internal server error! - No trip ID recieved",
             apikey: process.env.JUNNG_KIM_GOOGLE_MAP_API,
-            data: trips
+            data: trips,
+            active_user: req.session.user
         });
     }    
 
@@ -187,7 +231,8 @@ app.post('/deleteTrip', async (req, res) => {
         return res.status(400).render('pages/my_trips', {
             message: "Trip deletion failed!",
             apikey: process.env.JUNNG_KIM_GOOGLE_MAP_API,
-            data: trips
+            data: trips,
+            active_user: req.session.user
         });
     }
 
@@ -195,11 +240,79 @@ app.post('/deleteTrip', async (req, res) => {
     return res.render('pages/my_trips', {
         message: "Trip deleted!",
         apikey: process.env.JUNNG_KIM_GOOGLE_MAP_API,
-        data: trips
+        data: trips,
+        active_user: req.session.user
     })
 
 
 });
 
+// *****************************************************
+// * Trip interaction routes * //
+// *****************************************************
+
+app.post('/joinTrip', async (req, res) => {
+    if (!req.session.user) {
+        return res.status(400).render('pages/login', {
+          message: "Log in to join a trip!"
+        });
+    }
+    let trips = await getAllTrips(req.session.user.user_id);
+    let data = {
+        trip_id: req.body.tripID,
+        user_id: req.session.user.user_id
+    }
+
+    const dbResponse = await db.addRiderToTrip(data);
+
+    if (dbResponse.status === "error") {
+        console.log(dbResponse.error);
+        return res.status(400).render('pages/transit', {
+            message: dbResponse.message,
+            apikey: process.env.JUNNG_KIM_GOOGLE_MAP_API,
+            data: trips
+        });
+    } else {
+        trips = await getAllTrips(req.session.user.user_id);
+        return res.status(200).render('pages/transit', {
+            message: "Trip joined!",
+            apikey: process.env.JUNNG_KIM_GOOGLE_MAP_API,
+            data: trips
+        })
+    }
+});
+
+app.post('/leaveTrip', async (req, res) => {
+    if (!req.session.user) {
+        return res.status(400).render('pages/login', {
+          message: "Log in to leave a trip!"
+        });
+    }
+    let trips = await getUserTrips(req.session.user.user_id);
+    let data = {
+        trip_id: req.body.tripID,
+        user_id: req.session.user.user_id
+    }
+
+    const dbResponse = await db.removeRiderFromTrip(data);
+
+    if (dbResponse.status === "error") {
+        console.log("Error deleting trip from DB" + dbResponse.error);
+        return res.status(400).render('pages/my_trips', {
+            message: dbResponse.message,
+            apikey: process.env.JUNNG_KIM_GOOGLE_MAP_API,
+            data: trips,
+            active_user: req.session.user
+        });
+    } else {
+        trips = await getUserTrips(req.session.user.user_id);
+        return res.status(200).render('pages/my_trips', {
+            message: "Trip left!",
+            apikey: process.env.JUNNG_KIM_GOOGLE_MAP_API,
+            data: trips,
+            active_user: req.session.user
+        })
+    }
+});
 
 module.exports = app;

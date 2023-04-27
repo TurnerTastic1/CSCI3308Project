@@ -33,15 +33,6 @@ app.get('/', (req, res) => {
     res.redirect('/home');
 });
 
-app.get('/transit', (req, res) => {
-  if (!req.session.user) {
-    return res.status(400).render('pages/login', {
-      message: "Log in to view!"
-    });
-  }
-  res.render('pages/transit', {apikey: process.env.JUNNG_KIM_GOOGLE_MAP_API});
-});
-
 app.get('/login', (req, res) => {
     res.render('pages/login');
 });
@@ -86,4 +77,3 @@ try {
 } catch (error) {
   console.log('Server failed to start: ' + error);
 }
-

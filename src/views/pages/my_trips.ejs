@@ -85,10 +85,17 @@
                                     <p>TBC</p>
                                 </div>
                                 <div class="col">
+                                    <% if (item.user_id != active_user.user_id) {%>
+                                        <form action="/trip/leaveTrip" method="POST">
+                                            <input type="hidden" id="tripID" name="tripID" value="<%- item.trip_id %>">
+                                            <button type="submit" class="btn btn-outline-dark" style="float: right;">Leave</button>
+                                        </form>
+                                    <% } else { %>
                                     <form action="/trip/editTrips" method="POST">
                                         <input type="hidden" id="tripID" name="tripID" value="<%- item.trip_id %>">
                                         <button type="submit" class="btn btn-outline-dark" style="float: right;">Edit</button>
                                     </form>
+                                    <% } %>
                                 </div>
                             </div>
                             </li>
