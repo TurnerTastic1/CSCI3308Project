@@ -78,5 +78,18 @@ app.post('/createTrip', async (req, res) => {
     }
 });
 
+app.get('/editTrips', async (req, res) => {
+    // This checks if the user is logged in
+    if (!req.session.user) {
+        //console.log("Not logged in!");
+        return res.status(400).render('pages/login', {
+          message: "Log in to view!"
+        });
+    }
+    return res.status(200).render('pages/edit_trip', {
+        user: req.session.user
+    });
+});
+    
 
 module.exports = app;
