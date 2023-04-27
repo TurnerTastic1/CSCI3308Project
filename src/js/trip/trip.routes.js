@@ -29,8 +29,11 @@ const getUserTrips = async (user_id) => {
     }
 }
 
-const getAllTrips = async () => {
-    const dbResponse = await db.getAllTrips();
+const getAllTrips = async (user_id) => {
+    const data = {
+        user_id: user_id
+    }
+    const dbResponse = await db.getAllTrips(data);
     if (dbResponse.status === "success") {
         return dbResponse.data;
     } else {
@@ -49,7 +52,7 @@ app.get('/transit', async (req, res) => {
         message: "Log in to view!"
       });
     }
-    const trips = await getAllTrips();
+    const trips = await getAllTrips(req.session.user.user_id);
     res.render('pages/transit', {
         apikey: process.env.JUNNG_KIM_GOOGLE_MAP_API,
         data: trips
@@ -87,7 +90,7 @@ app.post('/editTrips', async (req, res) => {
 });
 
 // *****************************************************
-// * API crud routes * //
+// * Trip crud routes * //
 // *****************************************************
 
 app.post('/createTrip', async (req, res) => {
@@ -229,6 +232,41 @@ app.post('/deleteTrip', async (req, res) => {
     })
 
 
+});
+
+// *****************************************************
+// * Trip interaction routes * //
+// *****************************************************
+
+app.post('/joinTrip', async (req, res) => {
+    if (!req.session.user) {
+        return res.status(400).render('pages/login', {
+          message: "Log in to join a trip!"
+        });
+    }
+    let trips = await getAllTrips(req.session.user.user_id);
+    let data = {
+        trip_id: req.body.tripID,
+        user_id: req.session.user.user_id
+    }
+
+    const dbResponse = await db.addRiderToTrip(data);
+
+    if (dbResponse.status === "error") {
+        console.log(dbResponse.error);
+        return res.status(400).render('pages/transit', {
+            message: dbResponse.message,
+            apikey: process.env.JUNNG_KIM_GOOGLE_MAP_API,
+            data: trips
+        });
+    } else {
+        trips = await getAllTrips(req.session.user.user_id);
+        return res.status(200).render('pages/transit', {
+            message: "Trip joined!",
+            apikey: process.env.JUNNG_KIM_GOOGLE_MAP_API,
+            data: trips
+        })
+    }
 });
 
 module.exports = app;

@@ -2,11 +2,12 @@ const db = require('../dbConnection');
 
 // * DB queries and logic * //
 
-const getAllTrips = async () => {
-    const query = `SELECT * FROM trips;`;
-    
+const getAllTrips = async (data) => {
+    // get all trips that user has not created nor is a part of
+    const query = `SELECT * FROM trips WHERE user_id != $1;`;
+    const params = [data.user_id];
     try {
-        const dbResponse = await db.any(query);
+        const dbResponse = await db.any(query, params);
         return { status: "success", message: "All trips retrieved.", data: dbResponse };
     } catch (error) {
         return { status: "error", error: error, message: "Internal server error." };
@@ -76,11 +77,14 @@ const deleteTrip = async (data) => {
 const addRiderToTrip = async (data) => {
   const query = `INSERT INTO users_to_trips (user_id, trip_id) VALUES ($1, $2) returning *;`
   const params = [data.user_id, data.trip_id];
+
+  const updateQuery = `UPDATE trips SET seats=seats-1 WHERE trip_id=$1 returning *;`
   try {
     await db.one(query, params);
+    await db.one(updateQuery, [data.trip_id]);
     return { status: "success", message: "Rider added to trip." };
   } catch (error) {
-      return { status: "error", error: error, message: "Internal server error." };
+      return { status: "error", error: error, message: "Error adding user to join table." };
   }
 }
 

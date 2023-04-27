@@ -53,8 +53,8 @@
                                                   <p>TBC</p>
                                               </div>
                                               <div class="col">
-                                                <button type="button" onclick="showModal('hello','<p>hello</p>','<button>bye</button>')" class="btn btn-outline-dark" style="float: right;">Info</button>
-                                                <form action="/home" method="GET">
+                                                <button type="button" onclick="showModal('info','<p>info</p>','<button>bye</button>')" class="btn btn-outline-dark" style="float: right;">Info</button>
+                                                <form action="/trip/joinTrip" method="POST">
                                                   <input type="hidden" id="tripID" name="tripID" value="<%- item.trip_id %>">
                                                   <button type="submit" class="btn btn-outline-dark" style="float: right;">Join</button>
                                               </form>
