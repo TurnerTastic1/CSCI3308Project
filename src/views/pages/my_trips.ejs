@@ -85,7 +85,10 @@
                                     <p>TBC</p>
                                 </div>
                                 <div class="col">
-                                    <button type="submit" class="btn btn-outline-dark" style="float: right;">Edit</button>
+                                    <form action="/trip/editTrips" method="POST">
+                                        <input type="hidden" id="tripID" name="tripID" value="<%- item.trip_id %>">
+                                        <button type="submit" class="btn btn-outline-dark" style="float: right;">Edit</button>
+                                    </form>
                                 </div>
                             </div>
                             </li>

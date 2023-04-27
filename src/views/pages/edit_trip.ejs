@@ -8,7 +8,8 @@
             <h1 style="padding-top: 20px; padding-bottom: 10px;">
                 <centre>Update Trip</centre>
             </h1>
-            <form action="/trip/createTrip" method="POST" style="padding-top: 10px;">         
+            <form action="/trip/updateTrip" method="POST" style="padding-top: 10px;"> 
+                <input type="hidden" id="tripID" name="tripID" value="<%= locals.tripID %>">        
                 <div class="row" style="padding-bottom: 20px;">
                     <div class="col-md-6">
                         <div class="form-group">
@@ -62,11 +63,14 @@
                         <div class="col">
                             <div class="form-group">
                                 <div>
-                                    <button type="submit" class="btn btn-outline-danger" >Delete Trip</button>
                             </div>
                         </div>
                     </div>
                 </div> 
+            </form>
+            <form action="/trip/deleteTrip" method="POST">
+                <input type="hidden" id="tripID" name="tripID" value="<%= locals.tripID %>">
+                <button type="submit" class="btn btn-outline-danger" >Delete Trip</button>
             </form>
         </div>
     </main>
