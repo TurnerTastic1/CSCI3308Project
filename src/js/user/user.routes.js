@@ -10,6 +10,23 @@ const app = express.Router();
 const db = require('./userQueries');
 
 // *****************************************************
+// * Common functions * //
+// *****************************************************
+
+const getUserFriends = async (user_id) => {
+    const data = {
+        user_id: user_id
+    };
+    const dbResponse = await db.getUserFriends(data);
+    if (dbResponse.status === "success") {
+        return dbResponse.data;
+    } else {
+        console.log("Error retrieving user friends." + dbResponse.message + " " + dbResponse.error);
+        return [];
+    }
+}
+
+// *****************************************************
 // * Page rendering routes * //
 // *****************************************************
 
@@ -22,9 +39,12 @@ app.get('/profile', async (req, res) => {
         });
     }
 
+    const friends = await getUserFriends(req.session.user.user_id);
+
     // ! History of rides will need to be displayed here as well
     return res.status(200).render('pages/profile', {
-        user: req.session.user
+        user: req.session.user,
+        friends: friends
     }); 
 });
 
@@ -67,10 +87,12 @@ app.post('/updateInfo', async (req, res) => {
         
         return res.status(200).redirect('/user/profile');
     } else {
+        const friends = await getUserFriends(req.session.user.user_id);
         console.log("Error while updating user info- " + dbResponse.error);
         return res.status(400).render('pages/profile', {
             message: dbResponse.message,
-            user: req.session.user
+            user: req.session.user,
+            friends: friends
         });
     }
 

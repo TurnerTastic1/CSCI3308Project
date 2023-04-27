@@ -196,7 +196,8 @@ app.post('/updateTrip', async (req, res) => {
         return res.status(200).render('pages/my_trips', {
             message: "Trip updated!",
             apikey: process.env.JUNNG_KIM_GOOGLE_MAP_API,
-            data: trips
+            data: trips,
+            active_user: req.session.user
         })
     }
 });

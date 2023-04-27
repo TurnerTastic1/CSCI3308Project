@@ -7,3 +7,11 @@ INSERT INTO trips (user_id, departing, destination, purpose, time, seats) VALUES
 (1, 'Boulder', 'red rocks', 'concert', 'Wed Mar 16 00:00:00 2016', 5),
 (1, 'Boulder2', 'red rocks2', 'concert2', 'Wed Mar 16 00:00:00 2017', 2),
 (2, 'Boulder3', 'red rocks3', 'concert3', 'Wed Mar 16 00:00:00 2018', 3);
+
+INSERT INTO friends (user_id, friend_id) VALUES
+(1, 2),
+(1, 3),
+(2, 1),
+(2, 3),
+(3, 1),
+(3, 2);
