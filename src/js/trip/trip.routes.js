@@ -5,11 +5,18 @@
 
 const express = require('express'); // To build an application server or API
 const app = express.Router();
-
 const db = require('./tripQueries');
 
+// ********************************************************
+// * Static resource routes * //
+// ********************************************************
+
+app.use('/images', express.static('resources/img'));
+app.use('/styles', express.static('resources/css'));
+app.use('/modal', express.static('js/modal'));
+
 // *****************************************************
-// * Page rendering routes * //
+// * Common functions * //
 // *****************************************************
 
 const getUserTrips = async (user_id) => {
@@ -22,9 +29,32 @@ const getUserTrips = async (user_id) => {
     }
 }
 
+const getAllTrips = async () => {
+    const dbResponse = await db.getAllTrips();
+    if (dbResponse.status === "success") {
+        return dbResponse.data;
+    } else {
+        console.log("Error retrieving all trips." + dbResponse.message + " " + dbResponse.error);
+        return [];
+    }
+};
+
 // *****************************************************
 // * Page rendering routes * //
 // *****************************************************
+
+app.get('/transit', async (req, res) => {
+    if (!req.session.user) {
+      return res.status(400).render('pages/login', {
+        message: "Log in to view!"
+      });
+    }
+    const trips = await getAllTrips();
+    res.render('pages/transit', {
+        apikey: process.env.JUNNG_KIM_GOOGLE_MAP_API,
+        data: trips
+    });
+});
 
 app.get('/my_trips', async (req, res) => {
     if (!req.session.user) {
@@ -200,6 +230,5 @@ app.post('/deleteTrip', async (req, res) => {
 
 
 });
-
 
 module.exports = app;

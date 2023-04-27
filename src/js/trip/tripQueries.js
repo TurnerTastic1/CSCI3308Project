@@ -2,6 +2,17 @@ const db = require('../dbConnection');
 
 // * DB queries and logic * //
 
+const getAllTrips = async () => {
+    const query = `SELECT * FROM trips;`;
+    
+    try {
+        const dbResponse = await db.any(query);
+        return { status: "success", message: "All trips retrieved.", data: dbResponse };
+    } catch (error) {
+        return { status: "error", error: error, message: "Internal server error." };
+    }
+}
+
 const getTripByID = async (data) => {
     const query = `SELECT * FROM trips WHERE trip_id=$1;`;
     const params = [data.trip_id];
@@ -109,6 +120,7 @@ const removeRiderFromTrip = async (data) => {
 }
 
 module.exports = {
+  getAllTrips,
   getTripByID,
   createTrip,
   updateTrip,

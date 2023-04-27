@@ -47,16 +47,16 @@ function showModal(titleHtml, contentHtml, buttons) {
   document.body.appendChild(modal);
 }
 
-showModal("Sample Modal Title", "<p>Sample modal title</p>", [
-  {
-    label: "Got it!",
-    onClick: modal => {
-      console.log("the button was clicked!");
-    },
-    triggerClose: true
-  }
-]);
+// showModal("Sample Modal Title", "<p>Sample modal title</p>", [
+//   {
+//     label: "Got it!",
+//     onClick: modal => {
+//       console.log("the button was clicked!");
+//     },
+//     triggerClose: true
+//   }
+// ]);
 
-function sayHi() {
-  console.log("Hi!");
-}
+// function sayHi() {
+//   console.log("Hi!");
+// }
