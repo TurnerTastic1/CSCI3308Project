@@ -272,4 +272,35 @@ app.post('/joinTrip', async (req, res) => {
     }
 });
 
+app.post('/leaveTrip', async (req, res) => {
+    if (!req.session.user) {
+        return res.status(400).render('pages/login', {
+          message: "Log in to leave a trip!"
+        });
+    }
+    let trips = await getUserTrips(req.session.user.user_id);
+    let data = {
+        trip_id: req.body.tripID,
+        user_id: req.session.user.user_id
+    }
+
+    const dbResponse = await db.removeRiderFromTrip(data);
+
+    if (dbResponse.status === "error") {
+        console.log("Error deleting trip from DB" + dbResponse.error);
+        return res.status(400).render('pages/my_trips', {
+            message: dbResponse.message,
+            apikey: process.env.JUNNG_KIM_GOOGLE_MAP_API,
+            data: trips
+        });
+    } else {
+        trips = await getUserTrips(req.session.user.user_id);
+        return res.status(200).render('pages/my_trips', {
+            message: "Trip left!",
+            apikey: process.env.JUNNG_KIM_GOOGLE_MAP_API,
+            data: trips
+        })
+    }
+});
+
 module.exports = app;

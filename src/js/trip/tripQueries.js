@@ -143,10 +143,13 @@ const getRidersForTrip = async (data) => {
 // }
 
 const removeRiderFromTrip = async (data) => {
-  const query = `DELETE FROM users_to_trips WHERE user_id=$1, trip_id=$2;`
+  const query = `DELETE FROM users_to_trips WHERE user_id=$1 AND trip_id=$2;`
   const params = [data.user_id, data.trip_id];
+
+    const updateQuery = `UPDATE trips SET seats=seats+1 WHERE trip_id=$1 returning *;`
   try {
-    await db.one(query, params);
+    await db.any(query, params);
+    await db.one(updateQuery, [data.trip_id]);
     return { status: "success", message: "Rider removed from trip." };
   } catch (error) {
       return { status: "error", error: error, message: "Internal server error." };

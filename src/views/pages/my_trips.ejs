@@ -89,6 +89,10 @@
                                         <input type="hidden" id="tripID" name="tripID" value="<%- item.trip_id %>">
                                         <button type="submit" class="btn btn-outline-dark" style="float: right;">Edit</button>
                                     </form>
+                                    <form action="/trip/leaveTrip" method="POST">
+                                        <input type="hidden" id="tripID" name="tripID" value="<%- item.trip_id %>">
+                                        <button type="submit" class="btn btn-outline-dark" style="float: right;">Leave</button>
+                                    </form>
                                 </div>
                             </div>
                             </li>
