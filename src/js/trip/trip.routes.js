@@ -72,7 +72,8 @@ app.get('/my_trips', async (req, res) => {
     const trips = await getUserTrips(req.session.user.user_id);
     res.render('pages/my_trips', {
         apikey: process.env.JUNNG_KIM_GOOGLE_MAP_API,
-        data: trips
+        data: trips,
+        active_user: req.session.user
     });
 });
 
@@ -107,7 +108,8 @@ app.post('/createTrip', async (req, res) => {
         return res.status(400).render('pages/my_trips', {
           message: "Please fill out all fields!",
           apikey: process.env.JUNNG_KIM_GOOGLE_MAP_API,
-          data: trips
+          data: trips,
+          active_user: req.session.user
         });
     }
 
@@ -127,13 +129,15 @@ app.post('/createTrip', async (req, res) => {
         return res.status(400).render('pages/my_trips', {
             message: "Trip creation failed!",
             apikey: process.env.JUNNG_KIM_GOOGLE_MAP_API,
-            data: trips
+            data: trips,
+            active_user: req.session.user
         });
     } else {
         return res.status(200).render('pages/my_trips', {
             message: "Trip created!",
             apikey: process.env.JUNNG_KIM_GOOGLE_MAP_API,
-            data: trips
+            data: trips,
+            active_user: req.session.user
         })
     }
 });
@@ -157,7 +161,8 @@ app.post('/updateTrip', async (req, res) => {
         return res.status(400).render('pages/my_trips', {
             message: currentTrip.message,
             apikey: process.env.JUNNG_KIM_GOOGLE_MAP_API,
-            data: trips
+            data: trips,
+            active_user: req.session.user
         });
     }
 
@@ -183,7 +188,8 @@ app.post('/updateTrip', async (req, res) => {
         return res.status(400).render('pages/my_trips', {
             message: "Trip update failed!",
             apikey: process.env.JUNNG_KIM_GOOGLE_MAP_API,
-            data: trips
+            data: trips,
+            active_user: req.session.user
         });
     } else {
         trips = await getUserTrips(req.session.user.user_id);
@@ -208,7 +214,8 @@ app.post('/deleteTrip', async (req, res) => {
         return res.status(400).render('pages/my_trips', {
             message: "Internal server error! - No trip ID recieved",
             apikey: process.env.JUNNG_KIM_GOOGLE_MAP_API,
-            data: trips
+            data: trips,
+            active_user: req.session.user
         });
     }    
 
@@ -223,7 +230,8 @@ app.post('/deleteTrip', async (req, res) => {
         return res.status(400).render('pages/my_trips', {
             message: "Trip deletion failed!",
             apikey: process.env.JUNNG_KIM_GOOGLE_MAP_API,
-            data: trips
+            data: trips,
+            active_user: req.session.user
         });
     }
 
@@ -231,7 +239,8 @@ app.post('/deleteTrip', async (req, res) => {
     return res.render('pages/my_trips', {
         message: "Trip deleted!",
         apikey: process.env.JUNNG_KIM_GOOGLE_MAP_API,
-        data: trips
+        data: trips,
+        active_user: req.session.user
     })
 
 
@@ -291,14 +300,16 @@ app.post('/leaveTrip', async (req, res) => {
         return res.status(400).render('pages/my_trips', {
             message: dbResponse.message,
             apikey: process.env.JUNNG_KIM_GOOGLE_MAP_API,
-            data: trips
+            data: trips,
+            active_user: req.session.user
         });
     } else {
         trips = await getUserTrips(req.session.user.user_id);
         return res.status(200).render('pages/my_trips', {
             message: "Trip left!",
             apikey: process.env.JUNNG_KIM_GOOGLE_MAP_API,
-            data: trips
+            data: trips,
+            active_user: req.session.user
         })
     }
 });

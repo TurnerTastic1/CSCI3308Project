@@ -130,18 +130,6 @@ const getRidersForTrip = async (data) => {
     });
 }
 
-// const getTripsForRider = async (data) => {
-//   const query = `SELECT * FROM users_to_trips WHERE user_id=$1`;
-//   const params = [data.user_id];
-
-//   db.any(query, params)
-//     .then(data => {
-//       return data;
-//     }).catch(error => {
-//       return { status: "error", error: error, message: "Trips from rider request failed, all is doomed! Panic!" };
-//     });
-// }
-
 const removeRiderFromTrip = async (data) => {
   const query = `DELETE FROM users_to_trips WHERE user_id=$1 AND trip_id=$2;`
   const params = [data.user_id, data.trip_id];
