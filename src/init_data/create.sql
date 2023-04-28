@@ -36,3 +36,12 @@ CREATE TABLE friends(
     user_id INTEGER NOT NULL REFERENCES users (user_id),
     friend_id INTEGER NOT NULL REFERENCES users (user_id)
 );
+
+DROP TABLE IF EXISTS messages CASCADE;
+CREATE TABLE messages(
+    message_id SERIAL PRIMARY KEY NOT NULL,
+    sender_id INTEGER NOT NULL REFERENCES users (user_id),
+    receiver_id INTEGER NOT NULL REFERENCES users (user_id),
+    message VARCHAR(200) NOT NULL,
+    date_sent DATE NOT NULL
+);

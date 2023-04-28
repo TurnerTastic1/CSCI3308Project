@@ -56,8 +56,8 @@ app.use('/modal', express.static('js/modal'));
 // * Importing the post routes * //
 const authRoutes = require("./js/auth/auth.routes");
 const userRoutes = require("./js/user/user.routes");
-const apiRoutes = require("./js/services/api.service");
 const tripRoutes = require("./js/trip/trip.routes");
+const messageRoutes = require("./js/message/message.routes");
 
 // * Routes for all authentication is localhost:3000/auth + the route located on auth.routes.js * //
 // * For example, localhost:3000/auth/register will route to the register page * // 
@@ -67,7 +67,7 @@ app.use('/user', userRoutes);
 
 app.use('/trip', tripRoutes);
 
-// app.use('/api', apiRoutes);
+app.use('/message', messageRoutes);
 
 // *****************************************************
 // * starting the server and keeping the connection open to listen for more requests * //
