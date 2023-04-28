@@ -38,23 +38,40 @@ const getUserFriends = async (data) => {
   }
 };
 
-// const addFriend = async (data) => {
-//   const userSearchQuery = `SELECT * FROM users WHERE username=$1;`;
-//   const searchParams = [data.username];
+const addFriend = async (data) => {
+  const userSearchQuery = `SELECT * FROM users WHERE username=$1;`;
+  const searchParams = [data.username];
+  const dbResponse = await db.any(userSearchQuery, searchParams);
 
-//   try {
-//     const dbResponse = await db.one(userSearchQuery, searchParams);
-//     const friend_id = dbResponse.user_id;
-//     const query = `INSERT INTO friends (user_id, friend_id) VALUES ($1, $2);`;
-//     const params = [data.user_id, friend_id];
-//     await db.none(query, params);
-//     return { status: "success", message: "Friend added." };
-//   } catch (error) {
-//     return { status: "error", error: error, message: "Internal server error." };
-//   }
-// };
+  // Check if user exists
+  if (dbResponse.length === 0) return { status: "error", message: "User not found." };
+  if (dbResponse.length > 1) return { status: "error", message: "Multiple users found." };
+  
+  try {
+    // Check if user is trying to add themselves
+    const friend_id = dbResponse[0].user_id;
+    if (friend_id === data.user_id) return { status: "error", message: "You cannot add yourself as a friend." };
+    if (friend_id === undefined) return { status: "error", message: "User not found." };
+    
+    // Check if friend already exists
+    const relationQuery = `SELECT * FROM friends WHERE user_id=$1 AND friend_id=$2;`;
+    const relationParams = [data.user_id, friend_id];
+    const existingCheck = await db.any(relationQuery, relationParams);
+
+    if (existingCheck.length > 0) return { status: "error", message: "Friend already added." };
+
+    // Add friend
+    const query = `INSERT INTO friends (user_id, friend_id) VALUES ($1, $2);`;
+    const params = [data.user_id, friend_id];
+    await db.none(query, params);
+    return { status: "success", message: "Friend added." };
+  } catch (error) {
+    return { status: "error", error: error, message: "Internal server error." };
+  }
+};
 
 module.exports = {
     userDataUpdate,
-    getUserFriends
+    getUserFriends,
+    addFriend
 }

@@ -62,6 +62,10 @@ app.get('/updateInfo', (req, res) => {
     });
 });
 
+// *****************************************************
+// * API CRUD routes * //
+// *****************************************************
+
 app.post('/updateInfo', async (req, res) => {
     if (!req.session.user) { 
         return res.status(400).render('pages/login', {
@@ -97,6 +101,42 @@ app.post('/updateInfo', async (req, res) => {
     }
 
 
+});
+
+app.post('/addFriend', async (req, res) => {
+    if (!req.session.user) { 
+        return res.status(400).render('pages/login', {
+          message: "Log in to add a friend!"
+        });
+    }
+
+    if (!req.body.username) {
+        const friends = await getUserFriends(req.session.user.user_id);
+        return res.status(400).render('pages/profile', {
+            message: "Please enter a username.",
+            user: req.session.user,
+            friends: friends
+        });
+    }
+
+    const data = {
+        username: req.body.username,
+        user_id: req.session.user.user_id
+    }
+
+    const dbResponse = await db.addFriend(data);
+
+    if (dbResponse.status == "success") {
+        return res.status(200).redirect('/user/profile');
+    } else {
+        const friends = await getUserFriends(req.session.user.user_id);
+        console.log("Error while adding friend- " + dbResponse.error);
+        return res.status(400).render('pages/profile', {
+            message: dbResponse.message,
+            user: req.session.user,
+            friends: friends
+        });
+    }
 });
 
 module.exports = app;
