@@ -62,4 +62,21 @@ app.get('/messages', async (req, res) => {
     }); 
 });
 
+app.post('/messages/discuss', async (req, res) => {
+    // This checks if the user is logged in
+    if (!req.session.user) {
+        //console.log("Not logged in!");
+        return res.status(400).render('pages/login', {
+          message: "Log in to view!"
+        });
+    }
+
+    const messages = JSON.parse(req.body.message_data);
+
+    return res.status(200).render('pages/messages/discuss', {
+        user: req.session.user,
+        messages: messages
+    }); 
+});
+
 module.exports = app;

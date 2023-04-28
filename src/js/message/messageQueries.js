@@ -61,6 +61,7 @@ const getUserMessages = async (data) => {
             const receiverID = element[0].receiver_data.user_id;
             const messageSenderID = messageData.sender_data.user_id;
             const messageReceiverID = messageData.receiver_data.user_id;
+            
             if (senderID === messageSenderID && receiverID === messageReceiverID) {
                 return true;
             } else if (senderID === messageReceiverID && receiverID === messageSenderID) {
@@ -85,9 +86,7 @@ const getUserMessages = async (data) => {
     } catch (error) {
       return { status: "error", error: error, message: "Error fetching messages from messages table." };
     }
-}
-
-
+};
 
 module.exports = {
     getUserFriends,

@@ -15,9 +15,9 @@
               <centre>
                 <div class="col-md-10"> 
                     <div class="card w-200">
-                      <div class="card-body">
-                        <img src="/images/messenger.png" alt="history_icon" style="display:inline; width: 35px; padding-right: 10px;">  
+                      <div class="card-body">  
                         <h5 class="card-title" style="display:inline">Messages</h5>
+                        <img src="/images/messenger.png" alt="history_icon" style="display:inline; width: 35px; padding-right: 10px;">
                       </div>
                       <select class="form-select form-select-sm" aria-label=".form-select-sm example">
                         <option selected>Open this select menu</option>
@@ -27,13 +27,20 @@
                       </select>
                       <ul class="list-group list-group-flush">
                         <% 
-                            if (friends) {
+                            if (messages) {
                                 messages.forEach(function(message) {
                                     if (message[0].sender_id == user.user_id) { %>
-                                        <li class="list-group-item"><%- message[0].receiver_data.username %></li>
+                                        <li class="list-group-item"><%- message[0].receiver_data.username %>
                                     <% } else { %>
-                                        <li class="list-group-item"><%- message[0].sender_data.username %></li>
+                                        <li class="list-group-item"><%- message[0].sender_data.username %>
                                     <% } %>
+                                    <form action="/message/messages/discuss" method="POST">
+                                        <input type="hidden" id="message_data" name="message_data" value="<%= JSON.stringify(message) %>">
+                                        <button type="submit" class="btn btn-outline-dark btn-sm" style="float: right;">
+                                            Chat
+                                        </button>
+                                    </form>
+                                    </li>
                             <% }) } %>
                       </ul>
                     </div>  
