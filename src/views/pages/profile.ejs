@@ -58,7 +58,12 @@
               if (friends) {
                 friends.forEach(function(friend) {
             %>
-            <li class="list-group-item"><%- friend.username %></li>
+            <li class="list-group-item"><%- friend.username %>
+            <form action="/user/removeFriend" method="POST">
+              <input type="hidden" id="user_id" name="user_id" value="<%- friend.user_id %>">
+              <button type="submit" class="btn btn-outline-dark btn-sm" style="float: right;">Remove</button>
+            </form>
+            </li>
              <% }) } %>
           </ul>
         </div>

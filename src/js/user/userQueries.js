@@ -70,8 +70,21 @@ const addFriend = async (data) => {
   }
 };
 
+const removeFriend = async (data) => {
+  const query = `DELETE FROM friends WHERE user_id=$1 AND friend_id=$2;`;
+  const params = [data.user_id, data.friend_id];
+
+  try {
+    await db.none(query, params);
+    return { status: "success", message: "Friend removed." };
+  } catch (error) {
+    return { status: "error", error: error, message: "Internal server error." };
+  }
+};
+
 module.exports = {
     userDataUpdate,
     getUserFriends,
-    addFriend
+    addFriend,
+    removeFriend
 }
