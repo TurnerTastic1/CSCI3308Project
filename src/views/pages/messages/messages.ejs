@@ -29,10 +29,10 @@
                         <% 
                             if (friends) {
                                 messages.forEach(function(message) {
-                                    if (message.sender_id == user.user_id) { %>
-                                        <li class="list-group-item"><%- message.receiver_data.username %></li>
+                                    if (message[0].sender_id == user.user_id) { %>
+                                        <li class="list-group-item"><%- message[0].receiver_data.username %></li>
                                     <% } else { %>
-                                        <li class="list-group-item"><%- message.sender_data.username %></li>
+                                        <li class="list-group-item"><%- message[0].sender_data.username %></li>
                                     <% } %>
                             <% }) } %>
                       </ul>

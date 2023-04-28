@@ -38,7 +38,9 @@ const getUserMessages = async (data) => {
             sender_id: dbResponse[i].sender_id,
             receiver_id: dbResponse[i].receiver_id,
             message: dbResponse[i].message,
-            date_sent: dbResponse[i].date_sent
+            date_sent: dbResponse[i].date_sent,
+            sender_data: "",
+            receiver_data: ""
         }
 
         const senderQuery = `SELECT * FROM users WHERE user_id=$1;`;
@@ -50,10 +52,34 @@ const getUserMessages = async (data) => {
         const receiverResponse = await db.any(receiverQuery, receiverParams);
         // console.log(receiverResponse[0]);
 
-        messageData["sender_data"] = senderResponse[0];
-        messageData["receiver_data"] = receiverResponse[0];
+        messageData.sender_data = senderResponse[0];
+        messageData.receiver_data = receiverResponse[0];
 
-        messages.push(messageData);
+        // * Grouping messages based on user * //
+        function existingMessageUsers(element) {
+            const senderID = element[0].sender_data.user_id;
+            const receiverID = element[0].receiver_data.user_id;
+            const messageSenderID = messageData.sender_data.user_id;
+            const messageReceiverID = messageData.receiver_data.user_id;
+            if (senderID === messageSenderID && receiverID === messageReceiverID) {
+                return true;
+            } else if (senderID === messageReceiverID && receiverID === messageSenderID) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        
+        // * If messages from a given user dont yet exist then start a message "group" (Array//list of messages from a certain user) * //
+        // * else add message to message group * //
+        const found = messages.findIndex(existingMessageUsers);
+        if (found === -1) {
+            const messageWrapper = [messageData];
+            messages.push(messageWrapper);
+        } else {
+            messages[found].push(messageData);
+        }
+
       }
       return { status: "success", message: "User messages retrieved.", data: messages };
     } catch (error) {
