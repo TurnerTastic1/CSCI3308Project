@@ -61,7 +61,7 @@ const getUserMessages = async (data) => {
             const receiverID = element[0].receiver_data.user_id;
             const messageSenderID = messageData.sender_data.user_id;
             const messageReceiverID = messageData.receiver_data.user_id;
-            
+
             if (senderID === messageSenderID && receiverID === messageReceiverID) {
                 return true;
             } else if (senderID === messageReceiverID && receiverID === messageSenderID) {
@@ -88,7 +88,20 @@ const getUserMessages = async (data) => {
     }
 };
 
+const sendMessage = async (data) => {
+    const params = [data.sender_id, data.receiver_id, data.message, data.date_sent];
+    const query = `INSERT INTO messages (sender_id, receiver_id, message, date_sent) VALUES ($1, $2, $3, $4) RETURNING *;`;
+  
+    try {
+      const dbResponse = await db.one(query, params);
+      return { status: "success", message: "Message sent.", data: dbResponse };
+    } catch (error) {
+      return { status: "error", error: error, message: "Error sending message." };
+    }
+};
+
 module.exports = {
     getUserFriends,
-    getUserMessages
+    getUserMessages,
+    sendMessage
 };

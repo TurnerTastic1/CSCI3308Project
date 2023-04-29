@@ -40,6 +40,20 @@ const getUserMessages = async (user_id, username) => {
     }
 };
 
+const getUserGroup = async (user_id, username, friend_id) => {
+    const messages = await getUserMessages(user_id, username);
+
+    let group = [];
+    for (let i = 0; i < messages.length; i++) {
+        if (messages[i][0].sender_id === friend_id && messages[i][0].receiver_id === user_id) {
+            group = (messages[i]);
+        } else if (messages[i][0].sender_id === user_id && messages[i][0].receiver_id === friend_id) {
+            group = (messages[i]);
+        }
+    }
+    return group;
+};
+
 // *****************************************************
 // * Page rendering routes * //
 // *****************************************************
@@ -77,6 +91,51 @@ app.post('/messages/discuss', async (req, res) => {
         user: req.session.user,
         messages: messages
     }); 
+});
+
+app.post('/messages/send', async (req, res) => {
+    // This checks if the user is logged in
+    if (!req.session.user) {
+        //console.log("Not logged in!");
+        return res.status(400).render('pages/login', {
+          message: "Log in to view!"
+        });
+    }
+    
+    let receiver_data = JSON.parse(req.body.message_group);
+    
+    if (receiver_data[0].sender_id == req.session.user.user_id) {
+        receiver_data = receiver_data[0].receiver_data;
+    } else {
+        receiver_data = receiver_data[0].sender_data;
+    }
+    
+    const data = {
+        sender_id: req.session.user.user_id,
+        receiver_id: receiver_data.user_id,
+        message: req.body.MessageToSend,
+        date_sent: new Date()
+    };
+
+    const dbResponse = await db.sendMessage(data);
+    const messages = await getUserGroup(req.session.user.user_id, req.session.user.username, receiver_data.user_id);
+    
+    if (dbResponse.status === "success") {
+        return res.status(200).render('pages/messages/discuss', {
+            user: req.session.user,
+            messages: messages
+        });
+    } else {
+        console.log("Error sending message." + dbResponse.message + " " + dbResponse.error);
+        const friends = await getUserFriends(req.session.user.user_id);
+        const messages = await getUserMessages(req.session.user.user_id, req.session.user.username);
+        return res.status(400).render('pages/messages/messages', {
+            user: req.session.user,
+            friends: friends,
+            messages: messages,
+            message: "Error sending message."
+        });
+    }
 });
 
 module.exports = app;

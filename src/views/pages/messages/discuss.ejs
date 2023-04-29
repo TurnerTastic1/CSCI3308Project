@@ -19,11 +19,11 @@
                     <div class="card w-200">
                       <div class="card-body">  
                         <% if (messages[0].sender_id == user.user_id) {
-                            var receiver = messages[0].receiver_data.username;
+                            var receiver = messages[0].receiver_data;
                         } else {
-                            var receiver = messages[0].sender_data.username;
+                            var receiver = messages[0].sender_data;
                         } %>
-                        <h5 class="card-title" style="display:inline">Messages from <%- receiver %></h5>
+                        <h5 class="card-title" style="display:inline">Messages from <%- receiver.username %></h5>
                         <ul class="list-group list-group-flush">
                             <% 
                                 if (messages) {
@@ -32,11 +32,11 @@
                                 <% }) } %>
                         </ul>
                         <div class="form-floating">
-                            <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea" form="sendMessageForm"></textarea>
-                            <label for="floatingTextarea">Message</label>
+                            <textarea class="form-control" placeholder="Leave a comment here" id="MessageToSend" name="MessageToSend" form="sendMessageForm"></textarea>
+                            <label for="MessageToSend">Message</label>
                         </div>
-                        <form name="sendMessageForm">
-                            <input type="hidden" id="message_data" name="message_data" value="peen">
+                        <form action="/message/messages/send" method="POST" id="sendMessageForm" name="sendMessageForm">
+                            <input type="hidden" id="message_group" name="message_group" value="<%= JSON.stringify(messages) %>">
                             <button type="submit" class="btn btn-outline-dark btn-sm" style="float: right;">
                                 Send
                             </button>
@@ -45,7 +45,5 @@
                     </div>  
                   </div>
               </centre>
-              
-              
         </div>
     </main>
