@@ -50,6 +50,8 @@ app.get('/home', (req, res) => {
 app.use('/images', express.static('resources/img'));
 app.use('/styles', express.static('resources/css'));
 app.use('/modal', express.static('js/modal'));
+app.use('/maps', express.static('js/map'));
+
 
 // *****************************************************
 // * API routes * //
@@ -77,3 +79,6 @@ try {
 } catch (error) {
   console.log('Server failed to start: ' + error);
 }
+
+
+
