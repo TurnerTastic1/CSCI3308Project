@@ -28,7 +28,7 @@
                                 if (messages) {
                                     messages.forEach(function(message) { 
                                         %>
-                                        <p style="padding-left: 0%;"> <%- message.message %> </p>
+                                        <p style="padding-left: 0%;"> <%- message.message %> - <%- message.sender_data.username %></p>
                                     
                                     <% }) 
                                 } %>
