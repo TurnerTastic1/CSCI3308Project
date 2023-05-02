@@ -47,7 +47,7 @@
                                                   <p> <b>Seats:</b> <%- item.seats %></p>
                                               </div>
                                               <div class="col">
-                                                <button type="button" onclick="showModal('Trip details','<p><b>Time :</b> <%- item.time %></p> <p><b>From : </b><%- item.departing %></p> <p><b>To :</b> <%- item.destination %></p> <p><b>Purpose : </b><%- item.purpose %></p> <p><b>Seats :</b> <%- item.seats %></p>','<button>bye</button>')" class="btn btn-outline-dark" style="float: right;">Info</button>
+                                                <button type="button" onclick="showModal('Trip details','<p><b>Time :</b> <%- item.time %></p> <p><b>From : </b><%- item.departing %></p> <p><b>To :</b> <%- item.destination %></p> <p><b>Purpose : </b><%- item.purpose %></p> <p><b>Seats :</b> <%- item.seats %></p> <p><b>Phone number :</b> <%- item.user_info.phone %></p>','<button>bye</button>')" class="btn btn-outline-dark" style="float: right;">Info</button>
                                                 <form action="/trip/joinTrip" method="POST">
                                                   <input type="hidden" id="tripID" name="tripID" value="<%- item.trip_id %>">
                                                   <button style="margin-left: 10px;"type="submit" class="btn btn-outline-dark" style="float: right;">Join</button>
