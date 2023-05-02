@@ -4,18 +4,8 @@
 
     <main>
         <div class="container">
-            <div class="row">
-                <div class="col-sm-1">
-                    <a href="/message/messages" title="Back to messages">
-                        <img src="/images/messenger.png" alt="Profile_image" style="padding: 10px; width: 100px;">
-                    </a>
-                </div>
-                <div class="col">     
-                  <h3 style="padding: 10px; padding-top: 35px;">Welcome <%- user.username %></h3>
-                </div>
-              </div>
               <centre>
-                <div class="col-md-10"> 
+                <div class="col-md-10" style="padding-top: 20px;"> 
                     <div class="card w-200">
                       <div class="card-body">  
                         <% if (messages[0].sender_id == user.user_id) {
@@ -23,12 +13,14 @@
                         } else {
                             var receiver = messages[0].sender_data;
                         } %>
-                            <h5 class="card-title" style="display:inline">Messages from <%- receiver.username %></h5>
+                        <div style="padding-bottom: 20px;">
+                            <h4 class="card-title" style="display:inline;">Messages from <%- receiver.username %></h4>
+                        </div>
                             <% 
                                 if (messages) {
                                     messages.forEach(function(message) { 
                                         %>
-                                        <p style="padding-left: 0%;"> <%- message.message %> - <%- message.sender_data.username %></p>
+                                        <p style="padding-left: 0%;"><%- message.sender_data.username %>: <%- message.message %> </p>
                                     
                                     <% }) 
                                 } %>
@@ -36,7 +28,7 @@
                             <textarea class="form-control" placeholder="Leave a comment here" id="MessageToSend" name="MessageToSend" form="sendMessageForm"></textarea>
                             <label for="MessageToSend">Message</label>
                         </div>
-                        <form action="/message/messages/send" method="POST" id="sendMessageForm" name="sendMessageForm">
+                        <form action="/message/messages/send" method="POST" id="sendMessageForm" name="sendMessageForm" style="padding-top: 10px;">
                             <input type="hidden" id="message_group" name="message_group" value="<%= JSON.stringify(messages) %>">
                             <button type="submit" class="btn btn-outline-dark btn-sm" style="float: right;">
                                 Send

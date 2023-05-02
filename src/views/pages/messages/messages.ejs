@@ -30,8 +30,9 @@
                       <ul class="list-group list-group-flush">
                         <% 
                             if (messages) {
-                                messages.forEach(function(message) { 
-                                    if (message[0].sender_id == user.user_id) { %>
+                                messages.forEach(function(message) { %> 
+                                  <div>
+                                   <% if (message[0].sender_id == user.user_id) { %>
                                         <li class="list-group-item"><%- message[0].receiver_data.username %>
                                     <% } else { %>
                                         <li class="list-group-item"><%- message[0].sender_data.username %>
