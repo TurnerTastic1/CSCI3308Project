@@ -46,12 +46,20 @@
         <div class="col-md-9" style="padding-top: 20px;"> 
         <div class="card w-80">
           <div class="card-body">
+            <div class="col">
             <img src="/images/friends_icon.png" alt="friends_icon" style="display:inline; width: 35px; padding-right: 10px;">   
             <h5 class="card-title" style="display:inline;">Friends</h5>
-            <form action="/user/addFriend" method="POST">
+            <div class="col" style="float: right;">
+              <form action="/user/addFriend" method="POST">
               <input type="text" id="username" name="username" placeholder="Username">
               <button type="submit" class="btn btn-outline-dark btn-sm" style="float: right;">Add</button>
             </form>
+            </div>
+            <!-- <form action="/user/addFriend" method="POST">
+              <input type="text" id="username" name="username" placeholder="Username">
+              <button type="submit" class="btn btn-outline-dark btn-sm" style="float: right;">Add</button>
+            </form> -->
+            </div>
           </div>
           <ul class="list-group list-group-flush">
             <% 
