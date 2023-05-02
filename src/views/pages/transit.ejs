@@ -40,17 +40,11 @@
                               <% if(data && data != []) {
                                   data.forEach(function(item) {%>
                                       <li class="list-group-item">
+                                        <p> <b>Date:</b> <%- item.time %></p>
+                                        <p> <b>From:</b> <%- item.departing %>  &nbsp; &nbsp; <b>To:</b> <%- item.destination %></p>   
                                           <div class="row">
-                                              <div class="col-md-6">
-                                                  <p> <b>Date:</b> <%- item.time %></p>
-                                                  <p> <b>From:</b> <%- item.departing %></p>
-                                                  <p> <b>To:</b> <%- item.destination %></p>
-                                                  <p> <b>Purpose:</b> <%- item.purpose %></p>
-                                              </div>
-                                              <div class="col">    
-                                                  <b>Seats:</b> 
-                                                  <p><%- item.seats %></p>
-                                                  <p>TBC</p>
+                                              <div class="col">                                                   
+                                                  <p> <b>Seats:</b> <%- item.seats %></p>
                                               </div>
                                               <div class="col">
                                                 <button type="button" onclick="showModal('Trip details','<p><b>Time :</b> <%- item.time %></p> <p><b>From : </b><%- item.departing %></p> <p><b>To :</b> <%- item.destination %></p> <p><b>Purpose : </b><%- item.purpose %></p> <p><b>Seats :</b> <%- item.seats %></p>','<button>bye</button>')" class="btn btn-outline-dark" style="float: right;">Info</button>
