@@ -68,10 +68,12 @@
                     </div>
                 </div> 
             </form>
-            <form action="/trip/deleteTrip" method="POST">
-                <input type="hidden" id="tripID" name="tripID" value="<%= locals.tripID %>">
-                <button type="submit" class="btn btn-outline-danger" >Delete Trip</button>
-            </form>
+            <div style="padding-top: 20px;">
+                <form action="/trip/deleteTrip" method="POST">
+                    <input type="hidden" id="tripID" name="tripID" value="<%= locals.tripID %>">
+                    <button type="submit" class="btn btn-outline-danger" >Delete Trip</button>
+                </form>
+        </div>
         </div>
     </main>
 
