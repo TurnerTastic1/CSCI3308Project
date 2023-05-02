@@ -15,6 +15,11 @@ const getAllTrips = async (data) => {
             const params = [trip_id, data.user_id];
             const dbResponse2 = await db.any(query, params);
 
+            const infoQuery = `SELECT * FROM users WHERE user_id = $1;`;
+            const infoParams = [dbResponse[i].user_id];
+            const dbResponse3 = await db.one(infoQuery, infoParams);
+            dbResponse[i].user_info = dbResponse3;
+
             if (dbResponse2.length === 0) filteredResponse.push(dbResponse[i]);
         }
         return { status: "success", message: "All trips retrieved.", data: filteredResponse };
