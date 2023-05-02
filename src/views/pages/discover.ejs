@@ -1,0 +1,48 @@
+<%- include ('../partials/head') %> <%- include ('../partials/header') %>
+
+<div class="container">
+  <!-- TODO: Add search bar at the top with filters. -->
+
+  <%- include ('../partials/message') %>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Google Maps API Directions Services</title>
+</head>
+<body>
+    <div id="map" style="height:100vh"></div>
+    <script src=" https://maps.googleapis.com/maps/api/js?key=AIzaSyCeKubUPTPemVVW1I6Tr6prLKkotxXGcKo"></script>
+    <script>
+      const map = new google.maps.Map(document.getElementById("map"), {
+          center: new google.maps.LatLng(45.4215296, -75.6971931),
+          zoom: 15,
+          mapTypeId: google.maps.MapTypeId.ROADMAP,
+      });
+      
+      const directionsService = new google.maps.DirectionsService();
+      
+      directionsService.route(
+          {
+                  origin: "272 Bronson Ave, Ottawa, Canada",
+                  destination: "1385 Woodroffe Ave, Nepean, Canada",
+                  travelMode: "DRIVING",
+          },
+          (response, status) => {
+              if (status === "OK") {
+      
+                  new google.maps.DirectionsRenderer({
+                      suppressMarkers: true,
+                      directions: response,
+                      map: map,
+                    });
+              }
+          }
+      )
+      </script>
+</body>
+</html>
+</div>
+
+<%- include ('../partials/footer') %>
+
