@@ -21,7 +21,9 @@ const clearTestUser = async (data) => {
     const user = await db.one(query, [data.username]);
     console.log("Test user found: " + user.username + " - Deleting...");
     const deleteQuery = `DELETE FROM users WHERE username = $1 ;`;
-    await db.none(deleteQuery, [data.username]);
+    db.none(deleteQuery, [data.username]).then(() => {
+      console.log("Test user " + user.username + " deleted!");
+    }).catch(err => console.log(err));
   } catch (error) {
     return console.log("Test user not found. Continuing...");
   }
@@ -111,3 +113,60 @@ describe('Login!', () => {
   });
 
 });
+
+
+// Trip tests
+
+describe('Trips', () => {
+  // Test objects
+  const testUsers = [
+    { username: 'beyonce', password: 'singleladies' },
+    { username: 'pitbull', password: 'mrworldwide' },
+    { username: 'tswizz', password: 'outofstyle' },
+    { username: 'pritam', password: 'kabira' },
+    { username: 'jeremias', password: 'gruneaugen' }
+  ];
+
+  var agent;
+
+  before(async () => {
+    agent = chai.request.agent(server);
+    return Promise.all(
+      testUsers.map(clearTestUser)
+    );
+  })
+
+  testUsers.forEach(user => {
+    it('Registers user ' + user.username, done => {
+      agent.post('/auth/register')
+        .send(user)
+        .redirects(0)
+        .then(res => {
+          console.log(res.statusCode, res.statusMessage, res.text, res._data);
+          expect(res).to.have.status(302);
+          done();
+        }).catch(err => {
+          throw err;
+        });
+    });
+  });
+  
+  it('Logs in', done => {
+    agent
+      .post('/auth/login')
+      .send(testUsers[0])
+      .redirects(0)
+      .then(res => {
+        console.log(testUsers[0]);
+        console.log(res.statusCode, res.statusMessage, res.text.split('\n', 1), res._data);
+        console.log(res);
+        expect(res).to.have.status(302)
+          .and.have.cookie('sessionid');
+        done();
+      }).catch(err => {
+        throw err;
+      });
+  });
+
+  after(() => agent.close());
+})

@@ -57,7 +57,8 @@ app.get('/transit', async (req, res) => {
     }
     const trips = await getAllTrips(req.session.user.user_id);
     res.render('pages/transit', {
-        apikey: process.env.JUNNG_KIM_GOOGLE_MAP_API,
+        apikey: process.env.GCP_KEY,
+        refUrl: 'https://maps.googleapis.com/maps/api/js?key=' + process.env.GCP_KEY + '&libraries=places',
         data: trips
     });
 });
