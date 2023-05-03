@@ -76,6 +76,43 @@ app.get('/messages', async (req, res) => {
     }); 
 });
 
+app.post('/messages/startNew', async (req, res) => {
+    // This checks if the user is logged in
+    if (!req.session.user) {
+        //console.log("Not logged in!");
+        return res.status(400).render('pages/login', {
+          message: "Log in to view!"
+        });
+    }
+
+    if (req.body.username == '') return res.redirect('/message/messages');
+    
+    if (req.body.username == req.session.user.username) return res.redirect('/message/messages');
+
+    const data = {
+        username: req.body.username
+    }
+
+    const dbResponse = await db.getUserByUsername(data);
+
+    if (dbResponse.status === "error") {
+        console.log("Error retrieving user." + dbResponse.message + " " + dbResponse.error);
+        return res.redirect('/message/messages');
+    }
+
+    const sendData = {
+        sender_id: req.session.user.user_id,
+        receiver_id: dbResponse.data.user_id,
+        message: req.body.message || "Hello there!",
+        date_sent: new Date()
+    };
+
+    const dbResponse2 = await db.sendMessage(sendData);
+
+    if (dbResponse2.status === "error") console.log("Error sending message." + dbResponse2.message + " " + dbResponse2.error);
+    return res.redirect('/message/messages');
+});
+
 app.post('/messages/discuss', async (req, res) => {
     // This checks if the user is logged in
     if (!req.session.user) {
