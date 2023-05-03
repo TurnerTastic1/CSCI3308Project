@@ -1,0 +1,18 @@
+What do we need to get done 
+    - History tab
+    - Tests
+    - Maps (coordinates)
+    - Project report
+    - Messages
+    
+Meet at 430 to record video and rehearse presentation
+Write up contributions to the project
+Use case diagram
+Test results
+
+Deployment 
+    - Local host
+
+Turner adding to messages
+Map possibly finishing 
+Finishing project board things
