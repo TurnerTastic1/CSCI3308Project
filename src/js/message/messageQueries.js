@@ -88,6 +88,18 @@ const getUserMessages = async (data) => {
     }
 };
 
+const getUserByUsername = async (data) => {
+    const params = [data.username];
+    const query = `SELECT * FROM users WHERE username=$1;`;
+  
+    try {
+      const dbResponse = await db.one(query, params);
+      return { status: "success", message: "User retrieved.", data: dbResponse };
+    } catch (error) {
+      return { status: "error", error: error, message: "Error fetching user from users table." };
+    }
+}
+
 const sendMessage = async (data) => {
     const params = [data.sender_id, data.receiver_id, data.message, data.date_sent];
     const query = `INSERT INTO messages (sender_id, receiver_id, message, date_sent) VALUES ($1, $2, $3, $4) RETURNING *;`;
@@ -103,5 +115,6 @@ const sendMessage = async (data) => {
 module.exports = {
     getUserFriends,
     getUserMessages,
-    sendMessage
+    sendMessage,
+    getUserByUsername
 };
