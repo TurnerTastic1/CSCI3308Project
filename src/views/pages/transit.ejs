@@ -171,40 +171,50 @@ var autocomplete2 = new google.maps.places.Autocomplete(input2, options)
         google.maps.event.addDomListener(window, 'load', initialize);
 
 function initialize() {
-
   var input = document.getElementById('to');
   var input2 = document.getElementById('from');
 
-  var autocomplete = new google.maps.places.Autocomplete(input);
-  var autocomplete2 = new google.maps.places.Autocomplete(input2);
-  autocomplete.addListener('place_changed', function () {
+  let logPlaces = ac => {
+    console.log(ac);
+    var plc = ac.getPlace();
+    console.log(plc);
+    // console.log(place.geometry['location'].lat());
+    // console.log(place.geometry['location'].lng());
+  }
 
-    var place = autocomplete.getPlace();
-
-    // place variable will have all the information you are looking for.
-
-    $('#lat').val(place.geometry['location'].lat());
-
-    $('#long').val(place.geometry['location'].lng());
-
-    autocomplete2.addListener('source_changed'), function () {
-
-      var place2 = autocomplete.getPlace();
-
-      // place variable will have all the information you are looking for.
-
-      $('#lat').val(place2.geometry['location'].lat());
-
-      $('#long').val(place2.geometry['location'].lng());
-
-
-      
+  var autocomplete = new google.maps.places.SearchBox(input);
+  var autocomplete2 = new google.maps.places.SearchBox(input2);
+  // autocomplete.addListener("places_changed", () => console.log("Yes 1!"));
+  // autocomplete2.addListener("places_changed", () => console.log("Yes 2!"));
+  autocomplete.addListener('places_changed', () => {
+    console.log("Place to changed!");
+    console.log(autocomplete);
+    var places = autocomplete.getPlaces();
+    if (places.length == 0) {
+      console.log("No length");
     }
-
+    var place = places[0];
+    if (!place.geometry || !place.geometry.location) {
+      console.log("Returned place contains no geometry");
+      return;
+    }
+    console.log(place.geometry.location.toString());
   });
-
+  autocomplete2.addListener('places_changed', () => {
+    console.log("Place from changed!");
+    console.log(autocomplete2);
+    var places = autocomplete2.getPlaces();
+    if (places.length == 0) {
+      console.log("No length");
+    }
+    var place = places[0];
+    if (!place.geometry || !place.geometry.location) {
+      console.log("Returned place contains no geometry");
+      return;
+    }
+    console.log(place.geometry.location.toString());
+  });
 }
-
 
 
 
