@@ -5,9 +5,13 @@ const server = require('../index'); //TO-DO Make sure the path to your index.js 
 // Chai HTTP provides an interface for live integration testing of the API's.
 const chai = require('chai');
 const chaiHttp = require('chai-http');
-chai.should();
+var chaiAsPromised = require("chai-as-promised");
 chai.use(chaiHttp);
-const {assert, expect} = chai;
+chai.use(chaiAsPromised);
+chai.should();
+const { assert, expect } = chai;
+
+const ora = require('ora');
 
 const db = require('../js/dbConnection');
 
@@ -15,54 +19,54 @@ const db = require('../js/dbConnection');
 // * Clear test user from DB before running tests *
 // ********************************************************
 
-const clearTestUser = async (data) => {
-  try {
-    const query = `SELECT username FROM users WHERE username = $1 ;`;
-    const user = await db.one(query, [data.username]);
-    console.log("Test user found: " + user.username + " - Deleting...");
-    const deleteQuery = `DELETE FROM users WHERE username = $1 ;`;
-    db.none(deleteQuery, [data.username]).then(() => {
-      console.log("Test user " + user.username + " deleted!");
-    }).catch(err => console.log(err));
-  } catch (error) {
-    return console.log("Test user not found. Continuing...");
-  }
+const clearTestUser = (data) => {
+  const spinner = ora(`Checking for ${data.username}`).start();
+  const query = `SELECT username FROM users WHERE username = $1 ;`;
+  return db.oneOrNone(query, [data.username]).then(user => {
+    if (user == null) {
+      spinner.succeed(`${data.username} not found`);
+    } else {
+      spinner.text = `${data.username} found, deleting...`;
+      const deleteQuery = `DELETE FROM users WHERE username = $1 ;`;
+      return db.none(deleteQuery, [data.username]).then(() => {
+        spinner.succeed(`${data.username} deleted`);
+      });
+    }
+  });
 };
-
-// Clear test user from database
-clearTestUser({username: 'TestAccount1'});
-clearTestUser({username: 'TestAccount2'});
 
 describe('Server!', () => {
   // Sample test case given to test / endpoint.
-  it('Returns the default welcome message', done => {
+  step('Returns the default welcome message', () => {
     chai
       .request(server)
-      .get('/welcome')
-      .end((err, res) => {
-        expect(res).to.have.status(200);
+      .get('/welcome').should.eventually.have.status(200).then((res) => {
         expect(res.body.status).to.equals('success');
         assert.strictEqual(res.body.message, 'Welcome!');
-        done();
       });
+  });
+
+  step('Connects to database', () => {
+    return db.connect().should.be.fulfilled;
   });
 });
 
-describe('Register!', async () => {
-  
-  it('Postive - user creation', done => {
-    chai
-      .request(server)
-      .post('/auth/register')
-      .send({username: 'TestAccount1', password: 'Password123'})
-      .redirects(0)
-      .end((err, res) => {
-        expect(res).to.have.status(302);
-        done();
-      });
+describe('Register!', () => {
+  before(() => {
+    return Promise.all(
+      ['TestAccount1', 'TestAccount2'].map(user => clearTestUser({ username: user }))
+    );
   });
 
-  it('Postive - user creation with more info', done => {
+  step('Postive - user creation', () => {
+    return chai
+      .request(server)
+      .post('/auth/register')
+      .send({ username: 'TestAccount1', password: 'Password123' })
+      .redirects(0).should.eventually.have.status(302);
+  });
+
+  step('Postive - user creation with more info', done => {
     chai
       .request(server)
       .post('/auth/register')
@@ -74,7 +78,7 @@ describe('Register!', async () => {
       });
   });
 
-  it('Negative - Missing username or password', done => {
+  step('Negative - Missing username or password', done => {
     chai
       .request(server)
       .post('/auth/register')
@@ -89,7 +93,7 @@ describe('Register!', async () => {
 
 describe('Login!', () => {
   
-  it('Positive - user login', done => {
+  step('Positive - user login', done => {
     chai
       .request(server)
       .post('/auth/login')
@@ -101,7 +105,7 @@ describe('Login!', () => {
       });
   });
 
-  it('Negative - Missing username or password', done => {
+  step('Negative - Missing username or password', done => {
     chai
       .request(server)
       .post('/auth/login')
@@ -129,7 +133,7 @@ describe('Trips', () => {
 
   var agent;
 
-  before(async () => {
+  before(() => {
     agent = chai.request.agent(server);
     return Promise.all(
       testUsers.map(clearTestUser)
@@ -137,36 +141,31 @@ describe('Trips', () => {
   })
 
   testUsers.forEach(user => {
-    it('Registers user ' + user.username, done => {
-      agent.post('/auth/register')
+    step(`Registers user ${user.username}`, () => {
+      return agent.post('/auth/register')
         .send(user)
-        .redirects(0)
-        .then(res => {
-          console.log(res.statusCode, res.statusMessage, res.text, res._data);
-          expect(res).to.have.status(302);
-          done();
-        }).catch(err => {
-          throw err;
-        });
+        .redirects(0).should.eventually.have.status(302);
+    });
+
+    step(`Enters ${user.username} into database`, () => {
+      const query = `SELECT * FROM users WHERE username=$1 ;`;
+      return db.one(query, [user.username]).should.eventually.not.be.undefined;
     });
   });
   
-  it('Logs in', done => {
-    agent
+  step('Logs in', () => {
+    return agent
       .post('/auth/login')
       .send(testUsers[0])
-      .redirects(0)
-      .then(res => {
-        console.log(testUsers[0]);
-        console.log(res.statusCode, res.statusMessage, res.text.split('\n', 1), res._data);
-        console.log(res);
-        expect(res).to.have.status(302)
-          .and.have.cookie('sessionid');
-        done();
-      }).catch(err => {
-        throw err;
+      .should.eventually.redirectTo(/.*\/user\/profile/).then(() => {
+        agent.get('/user/profile').should.eventually.have.cookie('connect.sid');
       });
   });
 
-  after(() => agent.close());
-})
+  after(async () => {
+    agent.close();
+    return Promise.all(
+      testUsers.map(clearTestUser)
+    );
+  });
+});
