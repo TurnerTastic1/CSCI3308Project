@@ -103,7 +103,7 @@ app.post('/messages/startNew', async (req, res) => {
     const sendData = {
         sender_id: req.session.user.user_id,
         receiver_id: dbResponse.data.user_id,
-        message: "Hello there!",
+        message: req.body.message || "Hello there!",
         date_sent: new Date()
     };
 
