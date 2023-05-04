@@ -68,6 +68,39 @@ const getUserTrips = async (data) => {
     }
 }
 
+const getUserHistory = async (data) => {
+  const trips = [];
+  const params = [data.user_id];
+  const relationQuery = `SELECT * FROM users_to_trips WHERE user_id=$1;`;
+
+  try {
+      const dbResponse = await db.any(relationQuery, params);
+      const tripIDs = [];
+      for (let i = 0; i < dbResponse.length; i++) {
+          tripIDs.push(dbResponse[i].trip_id);
+      }
+      for (let i = 0; i < tripIDs.length; i++) {
+          const query = `SELECT * FROM trips WHERE trip_id=$1 and time < NOW();`;
+          const params = [tripIDs[i]];
+          const dbResponse = await db.one(query, params);
+          trips.push(dbResponse);
+      }
+  } catch (error) {
+      return { status: "error", error: error, message: "Error fetching trips from users_to_trips table." };
+  }
+
+  const query = `SELECT * FROM trips WHERE user_id=$1 and time < NOW();`;
+  try {
+      const dbResponse = await db.any(query, params);
+      for (let i = 0; i < dbResponse.length; i++) {
+          trips.push(dbResponse[i]);
+      }
+      return { status: "success", message: "User trips retrieved.", data: trips };
+  } catch (error) {
+      return { status: "error", error: error, message: "Error fetching trips from trip table." };
+  }
+}
+
 const createTrip = async (data) => {
   const query = `INSERT INTO trips (user_id, departing, departing_lat, departing_long, destination, destination_lat, destination_long, time, seats, purpose) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) returning *;`;
   const params = [data.user_id, data.departing, data.departing_lat, data.departing_long, data.destination, data.destination_lat, data.destination_long, data.time, data.seats, data.purpose];
@@ -151,6 +184,7 @@ module.exports = {
   updateTrip,
   deleteTrip,
   getUserTrips,
+  getUserHistory,
   addRiderToTrip,
   getRidersForTrip,
   removeRiderFromTrip

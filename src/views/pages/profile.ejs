@@ -77,10 +77,28 @@
             <h5 class="card-title" style="display:inline">History</h5>
           </div>
           <ul class="list-group list-group-flush">
-            <li class="list-group-item">Cras justo odio</li>
-            <li class="list-group-item">Dapibus ac facilisis in</li>
-            <li class="list-group-item">Vestibulum at eros</li>
-            <li class="list-group-item">....</li>
+            <% if(history && history != []) {
+              history.forEach(function(item) {%>
+                  <li class="list-group-item">
+                      <div class="row">
+                          <div class="col-md-6">
+                              <p> <b>Date:</b> <%- item.time %></p>
+                              <p> <b>From:</b> <%- item.departing %></p>
+                              <p> <b>To:</b> <%- item.destination %></p>
+                              <p> <b>Purpose:</b> <%- item.purpose %></p>
+                          </div>
+                          <div class="col">    
+                              <b>Seats:</b> 
+                              <p><%- item.seats %></p>
+                          </div>
+                      </div>
+                      </li>
+               <%})
+          } else {
+            console.log("No trips in database! Please add a trip." + data);
+            %>
+            <p>No trips in history! Go take some trips!</p>
+            <% } %>
           </ul>
         </div>  
       </div>
