@@ -64,8 +64,8 @@ const testUsers = [
 ];
 
 const testRoutes = [
-  { departing: "here", destination: "there", time: "1990-12-31T23:59:60Z", seats: 4, purpose: "funsies" },
-  { departing: "there", destination: "everywhere", time: "1990-12-31T23:59:60Z", seats: 3, purpose: "business" }
+  { departing: "Colorado School of Mines, Illinois Street, Golden, Colorado, États-Unis", departing_lat: 39.7510475, departing_long: -105.2225708, destination: "University of Colorado Boulder, Boulder, Colorado, États-Unis", destination_lat: 40.00758099999999, destination_long: -105.2659417, time: "2023-08-15 19:10:25-07", seats: 4, purpose: "Rambling... Ralphie?" },
+  { departing: "Engineering Center, Université du Colorado - Boulder, Engineering Drive, Boulder, Colorado, États-Unis", departing_lat: 40.0077327, departing_long: -105.2628997, destination: "Center for Community, Willard Loop Drive, Boulder, Colorado, États-Unis", destination_lat: 40.0043916, destination_long: -105.2649423, time: "2023-05-02 19:10:25-07", seats: 3, purpose: "Dinner!" }
 ];
 
 before(() => {

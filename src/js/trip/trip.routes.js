@@ -57,8 +57,7 @@ app.get('/transit', async (req, res) => {
     }
     const trips = await getAllTrips(req.session.user.user_id);
     res.render('pages/transit', {
-        apikey: process.env.GCP_KEY,
-        refUrl: 'https://maps.googleapis.com/maps/api/js?key=' + process.env.GCP_KEY + '&libraries=places',
+        apikey: process.env.JUNNG_KIM_GOOGLE_MAP_API,
         data: trips
     });
 });
@@ -105,7 +104,9 @@ app.post('/createTrip', async (req, res) => {
         });
     }
     let trips = await getUserTrips(req.session.user.user_id);
-    if (!req.body.departing || !req.body.destination || !req.body.time || !req.body.seats || !req.body.purpose) {
+    if (!(req.body.departing && req.body.departing_lat && req.body.departing_long &&
+        req.body.destination && req.body.destination_lat && req.body.destination_long &&
+        req.body.time && req.body.seats && req.body.purpose)) {
         return res.status(400).render('pages/my_trips', {
           message: "Please fill out all fields!",
           apikey: process.env.JUNNG_KIM_GOOGLE_MAP_API,
@@ -117,7 +118,11 @@ app.post('/createTrip', async (req, res) => {
     const data = {
         user_id: req.session.user.user_id,
         departing: req.body.departing,
+        departing_lat: req.body.departing_lat,
+        departing_long: req.body.departing_long,
         destination: req.body.destination,
+        destination_lat: req.body.destination_lat,
+        destination_long: req.body.destination_long,
         time: req.body.time,
         seats: req.body.seats,
         purpose: req.body.purpose
