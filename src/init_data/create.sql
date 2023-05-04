@@ -2,19 +2,23 @@ DROP TABLE IF EXISTS users CASCADE;
 CREATE TABLE users(
     user_id SERIAL PRIMARY KEY,
     username VARCHAR(50) NOT NULL UNIQUE,
-    password CHAR(60) NOT NULL,
-    home_address VARCHAR(100),
-    phone VARCHAR(100)
+    password TEXT NOT NULL,
+    home_address TEXT,
+    phone TEXT
 );
 
 DROP TABLE IF EXISTS trips CASCADE;
 CREATE TABLE trips(
     trip_id SERIAL PRIMARY KEY NOT NULL,
     user_id INTEGER NOT NULL,
-    departing CHAR(60) NOT NULL,
-    destination CHAR(60) NOT NULL,
-    purpose VARCHAR(200),
-    time DATE NOT NULL,
+    departing TEXT NOT NULL,
+    departing_lat DECIMAL NOT NULL,
+    departing_long DECIMAL NOT NULL,
+    destination TEXT NOT NULL,
+    destination_lat DECIMAL NOT NULL,
+    destination_long DECIMAL NOT NULL,
+    purpose TEXT,
+    time TIMESTAMP NOT NULL,
     seats INTEGER,
     FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE CASCADE
 );

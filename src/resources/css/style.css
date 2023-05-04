@@ -42,3 +42,8 @@
     height: 700px;
     width: 100%;  
 }
+
+.transit-scroller {
+    height: 50vh;
+    overflow-y: scroll;
+}

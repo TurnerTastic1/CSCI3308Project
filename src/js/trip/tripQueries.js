@@ -69,9 +69,9 @@ const getUserTrips = async (data) => {
 }
 
 const createTrip = async (data) => {
-  const query = `INSERT INTO trips (user_id, departing, destination, time, seats, purpose) VALUES ($1, $2, $3, $4, $5, $6) returning *;`;
-  const params = [data.user_id, data.departing, data.destination, data.time, data.seats, data.purpose];
-  
+  const query = `INSERT INTO trips (user_id, departing, departing_lat, departing_long, destination, destination_lat, destination_long, time, seats, purpose) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) returning *;`;
+  const params = [data.user_id, data.departing, data.departing_lat, data.departing_long, data.destination, data.destination_lat, data.destination_long, data.time, data.seats, data.purpose];
+
   try {
       await db.one(query, params);
       return { status: "success", message: "Trip created." };
