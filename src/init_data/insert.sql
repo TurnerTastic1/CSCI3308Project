@@ -15,3 +15,11 @@ INSERT INTO friends (user_id, friend_id) VALUES
 (2, 3),
 (3, 1),
 (3, 2);
+
+INSERT INTO messages (sender_id, receiver_id, message, date_sent) VALUES
+(1, 2, 'hello', 'Wed Mar 16 00:00:00 2016'),
+(1, 3, 'hello2', 'Wed Mar 16 00:00:00 2017'),
+(2, 1, 'hello3', 'Wed Mar 16 00:00:00 2018'),
+(2, 3, 'hello4', 'Wed Mar 16 00:00:00 2019'),
+(3, 1, 'hello5', 'Wed Mar 16 00:00:00 2020'),
+(3, 2, 'hello6', 'Wed Mar 16 00:00:00 2021');

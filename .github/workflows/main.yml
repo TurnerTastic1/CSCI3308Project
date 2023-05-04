@@ -1,0 +1,25 @@
+name: NPM Test
+on:
+  pull_request:
+  push: { branches: master }
+
+jobs:
+  test:
+    name: Run test suite
+    runs-on: ubuntu-latest
+    env:
+      COMPOSE_FILE: .ci/docker-compose.yaml
+      POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+      POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+      SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
+      JUNNG_KIM_GOOGLE_MAP_API: ${{ secrets.JUNNG_KIM_GOOGLE_MAP_API }}
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Build docker images
+      run: docker-compose build
+
+    - name: Run tests
+      run: docker-compose run test

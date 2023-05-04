@@ -15,9 +15,6 @@ function showModal(titleHtml, contentHtml, buttons) {
           ${contentHtml}
         </p>
       </div>
-      <div class="modal__bottom">
-        <button class="modal__button" type="button">Join</button>
-      </div>
     </div>
     `;
 
@@ -35,7 +32,6 @@ function showModal(titleHtml, contentHtml, buttons) {
       button.onClick(modal);
     });
 
-    modal.querySelector(".modal__button").appendChild(element);
   }
 
   modal.querySelector(".modal__close").addEventListener("click", () => {
