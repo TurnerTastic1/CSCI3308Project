@@ -38,11 +38,14 @@
                       <div class="card-body">
                           <h5 class="card-title" style="display:inline">My Trips</h5>
                       </div>
-                          <ul class="list-group list-group-flush">
+                          <ul class="list-group list-group-flush transit-scroller">
                               <!--  -->
                               <% if(data && data != []) {
                                   data.forEach(function(item) {%>
-                                      <li class="list-group-item">
+                                      <li class="list-group-item" 
+                                        fLat="<%= item.departing_lat %>" fLon="<%= item.departing_long %>"
+                                        tLat="<%= item.destination_lat %>" tLon="<%= item.destination_long %>"
+                                        onmouseenter="setRouteElement(this)">
                                           <div class="row">
                                               <div class="col-md-6">
                                                   <p> <b>Date:</b> <%- item.time %></p>
@@ -133,34 +136,47 @@
   initialize();
 </script>
 <script>
+var map;
+var directionsService, directionsDisplay;
+
 const makeMap = async () => {
-  const { Map } = await google.maps.importLibrary('maps');
+  var { Map } = await google.maps.importLibrary('maps');
   const { DirectionsService, DirectionsRenderer } = await google.maps.importLibrary('routes');
 
-  const map = new Map(document.getElementById("map"), {
+  directionsService = new DirectionsService();
+  directionsDisplay = new DirectionsRenderer();
+
+  map = new Map(document.getElementById("map"), {
     center: {lat: 45.4215296, lng: -75.6971931},
     zoom: 15,
     mapTypeId: 'roadmap'
   });
 
-  const directionsService = new DirectionsService();
+  directionsDisplay.setMap(map);
+}
 
+const setRoute = async (from, to) => {
   directionsService.route({
-    origin: "1111 Engineering Dr, Boulder, CO",
-    destination: "1485 Delgany St, Denver, CO",
+    origin: from,
+    destination: to,
     travelMode: "DRIVING",
   }, (response, status) => {
     if (status === "OK") {
-      new DirectionsRenderer({
-        suppressMarkers: true,
-        directions: response,
-        map: map,
-      });
+      directionsDisplay.setDirections(response);
     }
   });
 }
 
-makeMap();
+const setRouteElement = async (el) => {
+  from = {lat: parseFloat(el.getAttribute('flat')), lng: parseFloat(el.getAttribute('flon'))};
+  to = {lat: parseFloat(el.getAttribute('tlat')), lng: parseFloat(el.getAttribute('tlon'))};
+  await setRoute(from, to);
+}
+
+firstFrom = {lat: <%= data[0].departing_lat %>, lng: <%= data[0].departing_long %>}
+firstTo = {lat: <%= data[0].destination_lat %>, lng: <%= data[0].destination_long %>}
+
+makeMap().then(() => setRoute(firstFrom, firstTo));
 </script>
 
 
