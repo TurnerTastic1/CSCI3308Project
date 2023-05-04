@@ -1,0 +1,52 @@
+<%- include ('../../partials/head') %>
+  <%- include ('../../partials/menu') %>
+    <div class="col"><%- include ('../../partials/message') %></div>
+
+    <main>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-1">
+                    <img src="/images/profile_image.png" alt="Profile_image" style="padding: 10px; width: 100px;">
+                </div>
+                <div class="col">     
+                  <h3 style="padding: 10px; padding-top: 35px;">Welcome <%- user.username %></h3>
+                </div>
+              </div>
+              <centre>
+                <div class="col-md-10"> 
+                    <div class="card w-200">
+                      <div class="card-body">  
+                        <h5 class="card-title" style="display:inline">Messages</h5>
+                        <img src="/images/messenger.png" alt="history_icon" style="display:inline; width: 35px; padding-right: 10px;">
+                      </div>
+                      <select class="form-select form-select-sm" aria-label=".form-select-sm example">
+                        <option selected>Open this select menu</option>
+                        <option value="1">One</option>
+                        <option value="2">Two</option>
+                        <option value="3">Three</option>
+                      </select>
+                      <ul class="list-group list-group-flush">
+                        <% 
+                            if (messages) {
+                                messages.forEach(function(message) {
+                                    if (message[0].sender_id == user.user_id) { %>
+                                        <li class="list-group-item"><%- message[0].receiver_data.username %>
+                                    <% } else { %>
+                                        <li class="list-group-item"><%- message[0].sender_data.username %>
+                                    <% } %>
+                                    <form action="/message/messages/discuss" method="POST">
+                                        <input type="hidden" id="message_data" name="message_data" value="<%= JSON.stringify(message) %>">
+                                        <button type="submit" class="btn btn-outline-dark btn-sm" style="float: right;">
+                                            Chat
+                                        </button>
+                                    </form>
+                                    </li>
+                            <% }) } %>
+                      </ul>
+                    </div>  
+                  </div>
+              </centre>
+              
+              
+        </div>
+    </main>
