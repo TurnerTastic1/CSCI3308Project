@@ -11,14 +11,17 @@ const dbConfig = {
   
 const db = pgp(dbConfig);
 
-// test your database
-db.connect()
-    .then(obj => {
-        console.log('Database connection successful'); // you can view this message in the docker compose logs
-        obj.done(); // success, release the connection;
-    })
-    .catch(error => {
-        console.log('ERROR:', error.message || error);
-    });
+const testConnection = (verbose) => {
+    db.connect()
+        .then(obj => {
+            if(verbose) console.log('Database connection successful'); // you can view this message in the docker compose logs
+            obj.done(); // success, release the connection;
+        })
+        .catch(error => {
+            console.log('ERROR:', error.message || error);
+        });
+}
+
+testConnection(false);
 
 module.exports = db;

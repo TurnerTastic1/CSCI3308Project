@@ -126,11 +126,10 @@ function calRoute() {
       travelMode: google.maps.TravelMode.DRIVING, // WALKING, BYCYCLING, TRANSFORTATION
       unitSystem: google.maps.UnitSystem.IMPERIAL
   }
-
+  
   //Pass the request to the route method
   directionsService.route(request, (result, status) => {
     if (status == google.maps.DirectionsStatus.Ok) {
-
 
       //get distance and time
       const output = document.querySelector('#output');
