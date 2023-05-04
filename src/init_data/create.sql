@@ -16,23 +16,23 @@ CREATE TABLE trips(
     purpose VARCHAR(200),
     time DATE NOT NULL,
     seats INTEGER,
-    FOREIGN KEY (user_id) REFERENCES users (user_id)
+    FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE CASCADE
 );
 
 DROP TABLE IF EXISTS users_to_trips CASCADE;
 CREATE TABLE users_to_trips(
-    trip_id INTEGER NOT NULL REFERENCES trips (trip_id),
-    user_id INTEGER NOT NULL REFERENCES users (user_id)
+    trip_id INTEGER NOT NULL REFERENCES trips (trip_id) ON DELETE CASCADE,
+    user_id INTEGER NOT NULL REFERENCES users (user_id) ON DELETE CASCADE
 );
 
 DROP TABLE IF EXISTS history CASCADE;
 CREATE TABLE history(
-    trip_id INTEGER NOT NULL REFERENCES trips (trip_id),
-    user_id INTEGER NOT NULL REFERENCES users (user_id)
+    trip_id INTEGER NOT NULL REFERENCES trips (trip_id) ON DELETE CASCADE,
+    user_id INTEGER NOT NULL REFERENCES users (user_id) ON DELETE CASCADE
 );
 
 DROP TABLE IF EXISTS friends CASCADE;
 CREATE TABLE friends(
-    user_id INTEGER NOT NULL REFERENCES users (user_id),
-    friend_id INTEGER NOT NULL REFERENCES users (user_id)
+    user_id INTEGER NOT NULL REFERENCES users (user_id) ON DELETE CASCADE,
+    friend_id INTEGER NOT NULL REFERENCES users (user_id) ON DELETE CASCADE
 );

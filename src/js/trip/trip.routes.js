@@ -100,7 +100,7 @@ app.post('/editTrips', async (req, res) => {
 
 app.post('/createTrip', async (req, res) => {
     if (!req.session.user) {
-        return res.status(400).render('pages/login', {
+        return res.status(401).render('pages/login', {
           message: "Log in to create a trip!"
         });
     }
@@ -145,7 +145,7 @@ app.post('/createTrip', async (req, res) => {
 
 app.post('/updateTrip', async (req, res) => {
     if (!req.session.user) {
-        return res.status(400).render('pages/login', {
+        return res.status(401).render('pages/login', {
           message: "Log in to update a trip!"
         });
     }
@@ -205,7 +205,7 @@ app.post('/updateTrip', async (req, res) => {
 
 app.post('/deleteTrip', async (req, res) => {
     if (!req.session.user) {
-        return res.status(400).render('pages/login', {
+        return res.status(401).render('pages/login', {
           message: "Log in to delete a trip!"
         });
     }
@@ -254,7 +254,7 @@ app.post('/deleteTrip', async (req, res) => {
 
 app.post('/joinTrip', async (req, res) => {
     if (!req.session.user) {
-        return res.status(400).render('pages/login', {
+        return res.status(401).render('pages/login', {
           message: "Log in to join a trip!"
         });
     }
@@ -285,7 +285,7 @@ app.post('/joinTrip', async (req, res) => {
 
 app.post('/leaveTrip', async (req, res) => {
     if (!req.session.user) {
-        return res.status(400).render('pages/login', {
+        return res.status(401).render('pages/login', {
           message: "Log in to leave a trip!"
         });
     }

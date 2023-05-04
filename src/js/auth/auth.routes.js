@@ -5,7 +5,7 @@
 
 const express = require('express'); // To build an application server or API
 const app = express.Router();
-const session = require('express-session'); // To set the session object. To store or access session data, use the `req.session`, which is (generally) serialized as JSON by the store.
+// const session = require('express-session'); // To set the session object. To store or access session data, use the `req.session`, which is (generally) serialized as JSON by the store.
 const bcrypt = require('bcrypt'); //  To hash passwords
 
 // db import
@@ -99,7 +99,7 @@ app.post('/login', async (req, res) => {
 
 app.get('/logout', (req, res) => {
   if (!req.session.user) {
-    return res.status(400).render('pages/home', {
+    return res.status(401).render('pages/home', {
       message: "Can't logout if you arent logged in :)"
     });
   }

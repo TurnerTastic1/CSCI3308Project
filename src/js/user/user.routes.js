@@ -34,7 +34,7 @@ app.get('/profile', async (req, res) => {
     // This checks if the user is logged in
     if (!req.session.user) {
         //console.log("Not logged in!");
-        return res.status(400).render('pages/login', {
+        return res.status(401).render('pages/login', {
           message: "Log in to view!"
         });
     }
@@ -52,7 +52,7 @@ app.get('/updateInfo', (req, res) => {
     // This checks if the user is logged in
     if (!req.session.user) {
         //console.log("Not logged in!");
-        return res.status(400).render('pages/login', {
+        return res.status(401).render('pages/login', {
           message: "Log in to view!"
         });
     }
@@ -64,7 +64,7 @@ app.get('/updateInfo', (req, res) => {
 
 app.post('/updateInfo', async (req, res) => {
     if (!req.session.user) { 
-        return res.status(400).render('pages/login', {
+        return res.status(401).render('pages/login', {
           message: "Log in to change user info!"
         });
     }

@@ -1,11 +1,11 @@
 // Imports the index.js file to be tested.
-const server = require('../index'); //TO-DO Make sure the path to your index.js is correctly added
+const app = require('../index'); //TO-DO Make sure the path to your index.js is correctly added
 // Importing libraries
 
 // Chai HTTP provides an interface for live integration testing of the API's.
 const chai = require('chai');
 const chaiHttp = require('chai-http');
-var chaiAsPromised = require("chai-as-promised");
+const chaiAsPromised = require("chai-as-promised");
 chai.use(chaiHttp);
 chai.use(chaiAsPromised);
 chai.should();
@@ -21,13 +21,13 @@ const db = require('../js/dbConnection');
 
 const clearTestUser = (data) => {
   const spinner = ora(`Checking for ${data.username}`).start();
-  const query = `SELECT username FROM users WHERE username = $1 ;`;
+  const query = `SELECT username FROM users WHERE username = $1`;
   return db.oneOrNone(query, [data.username]).then(user => {
     if (user == null) {
       spinner.succeed(`${data.username} not found`);
     } else {
       spinner.text = `${data.username} found, deleting...`;
-      const deleteQuery = `DELETE FROM users WHERE username = $1 ;`;
+      const deleteQuery = `DELETE FROM users WHERE username = $1`;
       return db.none(deleteQuery, [data.username]).then(() => {
         spinner.succeed(`${data.username} deleted`);
       });
@@ -35,137 +35,152 @@ const clearTestUser = (data) => {
   });
 };
 
+const clearTestRoute = (data) => {
+  const spinner = ora(`Checking for ${data.departing}`).start();
+  const query = `SELECT trip_id FROM trips WHERE departing = $1`;
+  return db.oneOrNone(query, [data.departing]).then(trip => {
+    if (trip == null) {
+      spinner.succeed(`${data.departing} not found`);
+    } else {
+      spinner.text = `${data.departing} found, deleting...`;
+      const deleteQuery = `DELETE FROM trips WHERE trip_id = $1`;
+      return db.none(deleteQuery, [trip.trip_id]).then(() => {
+        spinner.succeed(`${data.departing} deleted`);
+      });
+    }
+  });
+};
+
+// Shared agent
+const agent = chai.request.agent(app);
+
+// Test objects
+const testUsers = [
+  { username: 'beyonce', password: 'singleladies' },
+  { username: 'pitbull', password: 'mrworldwide' },
+  { username: 'tswizz', password: 'outofstyle' },
+  { username: 'pritam', password: 'kabira' },
+  { username: 'jeremias', password: 'gruneaugen' }
+];
+
+const testRoutes = [
+  { departing: "here", destination: "there", time: "1990-12-31T23:59:60Z", seats: 4, purpose: "funsies" },
+  { departing: "there", destination: "everywhere", time: "1990-12-31T23:59:60Z", seats: 3, purpose: "business" }
+];
+
+before(() => {
+  return Promise.all(
+    ['TestAccount1', 'TestAccount2'].map(user => clearTestUser({ username: user }))
+      .concat(testUsers.map(clearTestUser))
+      .concat(testRoutes.map(clearTestRoute))
+  );
+});
+
 describe('Server!', () => {
   // Sample test case given to test / endpoint.
   step('Returns the default welcome message', () => {
-    chai
-      .request(server)
-      .get('/welcome').should.eventually.have.status(200).then((res) => {
+    return agent
+      .get('/welcome')
+      .should.eventually.have.status(200)
+      .then((res) => {
         expect(res.body.status).to.equals('success');
         assert.strictEqual(res.body.message, 'Welcome!');
       });
   });
 
   step('Connects to database', () => {
-    return db.connect().should.be.fulfilled;
+    return db.connect().should.be.fulfilled.then(obj => obj.done());
   });
 });
 
 describe('Register!', () => {
-  before(() => {
-    return Promise.all(
-      ['TestAccount1', 'TestAccount2'].map(user => clearTestUser({ username: user }))
-    );
-  });
-
-  step('Postive - user creation', () => {
-    return chai
-      .request(server)
-      .post('/auth/register')
-      .send({ username: 'TestAccount1', password: 'Password123' })
-      .redirects(0).should.eventually.have.status(302);
-  });
-
-  step('Postive - user creation with more info', done => {
-    chai
-      .request(server)
-      .post('/auth/register')
-      .send({username: 'TestAccount2', password: 'Password123', home_address: '1234 Test St', phone: '1234 Test St'})
-      .redirects(0)
-      .end((err, res) => {
-        expect(res).to.have.status(302);
-        done();
-      });
-  });
-
-  step('Negative - Missing username or password', done => {
-    chai
-      .request(server)
-      .post('/auth/register')
-      .send({username: 'TestAccount1', password: ''})
-      .end((err, res) => {
-        expect(res).to.have.status(400);
-        done();
-      });
-  });
-
-});
-
-describe('Login!', () => {
-  
-  step('Positive - user login', done => {
-    chai
-      .request(server)
-      .post('/auth/login')
-      .send({username: 'TestAccount1', password: 'Password123'})
-      .redirects(0)
-      .end((err, res) => {
-        expect(res).to.have.status(302);
-        done();
-      });
-  });
-
-  step('Negative - Missing username or password', done => {
-    chai
-      .request(server)
-      .post('/auth/login')
-      .send({username: 'TestAccount1', password: ''})
-      .end((err, res) => {
-        expect(res).to.have.status(400);
-        done();
-      });
-  });
-
-});
-
-
-// Trip tests
-
-describe('Trips', () => {
-  // Test objects
-  const testUsers = [
-    { username: 'beyonce', password: 'singleladies' },
-    { username: 'pitbull', password: 'mrworldwide' },
-    { username: 'tswizz', password: 'outofstyle' },
-    { username: 'pritam', password: 'kabira' },
-    { username: 'jeremias', password: 'gruneaugen' }
-  ];
-
-  var agent;
-
-  before(() => {
-    agent = chai.request.agent(server);
-    return Promise.all(
-      testUsers.map(clearTestUser)
-    );
-  })
-
   testUsers.forEach(user => {
     step(`Registers user ${user.username}`, () => {
       return agent.post('/auth/register')
         .send(user)
-        .redirects(0).should.eventually.have.status(302);
+        .redirects(0).should.eventually.redirectTo(/\/login/);
     });
 
     step(`Enters ${user.username} into database`, () => {
-      const query = `SELECT * FROM users WHERE username=$1 ;`;
+      const query = `SELECT * FROM users WHERE username=$1`;
       return db.one(query, [user.username]).should.eventually.not.be.undefined;
     });
   });
-  
+
+  step('Postive - user creation with more info', () => {
+    return agent
+      .post('/auth/register')
+      .send({ username: 'TestAccount2', password: 'Password123', home_address: '1234 Test St', phone: '1234 Test St' })
+      .should.eventually.redirectTo(/\/login/);
+  });
+
+  step('Negative - Missing username or password', () => {
+    return agent
+      .post('/auth/register')
+      .send({ username: 'TestAccount1', password: '' })
+      .should.eventually.have.status(400);
+  });
+});
+
+describe('Login!', () => {
+
+  step(`First user in database`, () => {
+    const query = `SELECT * FROM users WHERE username=$1`;
+    return db.one(query, [testUsers[0].username]).should.eventually.not.be.undefined;
+  });
+
   step('Logs in', () => {
     return agent
       .post('/auth/login')
       .send(testUsers[0])
-      .should.eventually.redirectTo(/.*\/user\/profile/).then(() => {
-        agent.get('/user/profile').should.eventually.have.cookie('connect.sid');
+      .then(res => {
+        return expect(res).to.redirectTo(/\/user\/profile/);
       });
   });
 
-  after(async () => {
-    agent.close();
+  step('Positive - user logout', () => {
+    return agent
+      .get('/auth/logout')
+      .then(res => {
+        return expect(res).to.have.status(200);
+      });
+  });
+
+  step('Negative - Missing username or password', () => {
+    return agent
+      .post('/auth/login')
+      .send({ username: 'TestAccount1', password: '' })
+      .should.eventually.have.status(400);
+  });
+});
+
+describe('Trips', () => {
+  before(() => {
     return Promise.all(
-      testUsers.map(clearTestUser)
+      testRoutes.map(clearTestRoute)
     );
   });
+
+  step('Logs in', () => {
+    return agent
+      .post('/auth/login')
+      .send(testUsers[0])
+      .should.eventually.redirectTo(/\/user\/profile/);
+  });
+
+  testRoutes.forEach(route => {
+    step(`Route ${route.departing} creates`, () => {
+      return agent
+        .post('/trip/createTrip')
+        .send(route)
+        .should.eventually.have.status(200).then(() => {
+          const query = `SELECT * FROM trips WHERE departing=$1`;
+          return db.one(query, [route.departing]).should.eventually.not.be.undefined;
+        });
+    });
+  });
+});
+
+after(() => {
+  agent.close();
 });

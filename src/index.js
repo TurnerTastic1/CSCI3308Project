@@ -3,6 +3,7 @@ const express = require('express'); // To build an application server or API
 const app = express();
 const bodyParser = require('body-parser');
 const session = require('express-session'); // To set the session object. To store or access session data, use the `req.session`, which is (generally) serialized as JSON by the store.
+const db = require('./js/dbConnection');
 
 // ********************************************************
 app.set('view engine', 'ejs'); // set the view engine to EJS
@@ -11,9 +12,14 @@ app.use(bodyParser.json()); // specify the usage of JSON for parsing request bod
 // initialize session variables
 app.use(
   session({
+    store: new (require('connect-pg-simple')(session))({
+      pgPromise: db,
+      createTableIfMissing: true
+    }),
     secret: process.env.SESSION_SECRET,
-    saveUninitialized: false,
-    resave: false,
+    saveUninitialized: true,
+    resave: true,
+    name: 'sessionid'
   })
 );
 
