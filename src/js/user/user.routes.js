@@ -8,6 +8,20 @@ const app = express.Router();
 
 // db import
 const db = require('./userQueries');
+const tripDB = require('../trip/tripQueries');
+
+const getUserHistory = async (user_id) => {
+    const data = {
+        user_id: user_id
+    };
+    const dbResponse = await tripDB.getUserHistory(data);
+    if (dbResponse.status === "success") {
+        return dbResponse.data;
+    } else {
+        console.log("Error retrieving user history." + dbResponse.message + " " + dbResponse.error);
+        return [];
+    }
+};
 
 // *****************************************************
 // * Common functions * //
@@ -40,11 +54,13 @@ app.get('/profile', async (req, res) => {
     }
 
     const friends = await getUserFriends(req.session.user.user_id);
+    const history = await getUserHistory(req.session.user.user_id);
 
     // ! History of rides will need to be displayed here as well
     return res.status(200).render('pages/profile', {
         user: req.session.user,
-        friends: friends
+        friends: friends,
+        history: history
     }); 
 });
 
